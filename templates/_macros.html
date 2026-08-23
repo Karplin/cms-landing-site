@@ -84,15 +84,17 @@
     <p class="project-area">{{ proyecto.area_label }}</p>
     <h3>{{ proyecto.title }}</h3>
     <p class="place">{{ proyecto.place }}</p>
-    <a class="link-more" href="{{ proyecto.href or '#' }}">Ver el proyecto</a>
+    {% set destino = proyecto.href if proyecto.href and proyecto.href != '#'
+                     else url_for('proyecto_detalle', item_id=proyecto.id) %}
+    <a class="link-more" href="{{ destino }}">Ver el proyecto</a>
   </div>
 </article>
 {%- endmacro %}
 
-{% macro item_fecha(item) -%}
+{% macro item_fecha(item, url=None) -%}
 <li class="item">
   <div class="item-date"><p class="d">{{ item.day }}</p><p class="m">{{ item.month }}</p></div>
-  <a href="{{ item.href or '#' }}">
+  <a href="{{ url or item.href or '#' }}">
     <h4>{{ item.title }}</h4>
     {% if item.summary %}<p>{{ item.summary }}</p>{% endif %}
   </a>

@@ -18,13 +18,15 @@ import db
 from schema import (CONTENT_TYPES, SECTION_FIELDS, SECTION_KEYS,
                     SETTINGS_GROUPS, settings_fields)
 
-# Menú principal: cada entrada es una página propia.
+# Menú principal. Un elemento con "children" despliega un submenú;
+# "endpoint" en None hace que el rótulo no sea un enlace (solo abre el submenú).
 NAV = [
-    ("quienes_somos", "Quiénes somos"),
-    ("programas", "Programas"),
-    ("noticias", "Noticias y eventos"),
-    ("territorio", "Presencia territorial"),
-    ("documentacion", "Documentación"),
+    {"endpoint": "quienes_somos", "label": "Quiénes somos", "children": "areas"},
+    {"endpoint": "programas", "label": "Programas", "children": None},
+    {"endpoint": None, "label": "Noticias y eventos",
+     "children": [("noticias", "Noticias"), ("eventos", "Eventos")]},
+    {"endpoint": "territorio", "label": "Presencia territorial", "children": None},
+    {"endpoint": "documentacion", "label": "Documentación", "children": None},
 ]
 
 app = Flask(__name__)
@@ -88,8 +90,20 @@ def inject_site():
     """Cabecera, menú y pie: lo que necesita base.html en toda página pública."""
     if (request.endpoint or "").startswith("admin"):
         return {}
+    menu = []
+    for item in NAV:
+        hijos = []
+        if item["children"] == "areas":
+            hijos = [("quienes_somos", "Las cuatro áreas", None)] + [
+                ("area_detalle", fila["title"], fila["id"])
+                for fila in db.list_rows("areas", only_published=True)
+            ]
+        elif item["children"]:
+            hijos = [(ep, etiqueta, None) for ep, etiqueta in item["children"]]
+        menu.append({"endpoint": item["endpoint"], "label": item["label"], "children": hijos})
+
     return {
-        "nav": NAV,
+        "nav": menu,
         "settings": db.all_settings(),
         "sections": db.all_sections(),
         "footer_links": {
@@ -184,13 +198,68 @@ def programas():
     )
 
 
+def _url_o_detalle(fila, endpoint):
+    """El enlace guardado manda; si es un marcador vacío, va a la página de detalle."""
+    if fila.get("href") and fila["href"] != "#":
+        return fila["href"]
+    return url_for(endpoint, item_id=fila["id"])
+
+
 @app.route("/noticias")
 def noticias():
+    filas = db.list_rows("news", only_published=True)
     return render_template(
-        "noticias.html",
-        news=db.list_rows("news", only_published=True),
-        events=db.list_rows("events", only_published=True),
+        "listado.html", titulo=db.get_setting("news_col_title", "Noticias"),
+        filas=[dict(f, url=_url_o_detalle(f, "noticia_detalle")) for f in filas],
+        vacio="Sin noticias por ahora.",
     )
+
+
+@app.route("/eventos")
+def eventos():
+    filas = db.list_rows("events", only_published=True)
+    return render_template(
+        "listado.html", titulo=db.get_setting("events_col_title", "Eventos"),
+        filas=[dict(f, url=_url_o_detalle(f, "evento_detalle")) for f in filas],
+        vacio="Sin eventos convocados.",
+    )
+
+
+def _detalle(table, item_id, **extra):
+    fila = db.get_row(table, item_id)
+    if fila is None or not fila["published"]:
+        abort(404)
+    return render_template("detalle.html", fila=fila, **extra)
+
+
+@app.route("/noticias/<int:item_id>")
+def noticia_detalle(item_id):
+    return _detalle("news", item_id, kicker="Noticias",
+                    volver=("noticias", "Todas las noticias"))
+
+
+@app.route("/eventos/<int:item_id>")
+def evento_detalle(item_id):
+    return _detalle("events", item_id, kicker="Eventos",
+                    volver=("eventos", "Todos los eventos"))
+
+
+@app.route("/territorio/<int:item_id>")
+def voz_detalle(item_id):
+    return _detalle("voices", item_id, kicker=None,
+                    volver=("territorio", "Todas las voces"))
+
+
+@app.route("/programas/<int:item_id>")
+def proyecto_detalle(item_id):
+    return _detalle("projects", item_id, kicker=None,
+                    volver=("programas", "Todos los proyectos"))
+
+
+@app.route("/quienes-somos/<int:item_id>")
+def area_detalle(item_id):
+    return _detalle("areas", item_id, kicker="Áreas de trabajo",
+                    volver=("quienes_somos", "Todas las áreas"))
 
 
 @app.route("/territorio")

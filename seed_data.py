@@ -207,7 +207,7 @@ SEED = {
             "day": "20", "month": "Ago",
             "title": "El Instituto publica el presupuesto abierto de sus 1 284 proyectos",
             "summary": "La base de datos puede consultarse y descargarse por territorio, área y año.",
-            "href": "/noticias",
+            "href": "#",
         },
         {
             "day": "11", "month": "Ago",

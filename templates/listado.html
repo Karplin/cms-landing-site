@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}{{ titulo }} · {{ settings.site_title }}{% endblock %}
+
+{% block content %}
+{% set s = sections.news %}
+<section class="photo-banner">
+  <div class="photo-banner-img" aria-hidden="true"></div>
+  <div class="plaque"><h1>{{ titulo }}</h1></div>
+</section>
+
+<section class="band band--alt band--after-plaque">
+  <div class="wrap">
+    {% if filas %}
+    <div class="feed">
+      {% for fila in filas %}
+      <article class="feed-item">
+        <a class="feed-visual" href="{{ fila.url }}" aria-hidden="true" tabindex="-1">
+          <span class="mondo-visual" data-tone="{{ ['teal','amber','green','plum'][loop.index0 % 4] }}"></span>
+        </a>
+        <div class="feed-body">
+          <p class="feed-date">{{ fila.day }} {{ fila.month }}</p>
+          <h3><a href="{{ fila.url }}">{{ fila.title }}</a></h3>
+          {% if fila.summary %}<p class="feed-summary">{{ fila.summary }}</p>{% endif %}
+          <a class="link-more" href="{{ fila.url }}">Leer más</a>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty-note">{{ vacio }}</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ fila.title }} · {{ settings.site_title }}{% endblock %}
+
+{% block content %}
+<section class="page-banner">
+  <div class="wrap">
+    <p class="eyebrow">
+      {%- if fila.place is defined and fila.place %}{{ fila.place }}
+      {%- elif fila.area_label is defined and fila.area_label %}{{ fila.area_label }}
+      {%- elif kicker %}{{ kicker }}{% endif %}
+      {%- if fila.date_label is defined and fila.date_label %} · {{ fila.date_label }}
+      {%- elif fila.day is defined and fila.day %} · {{ fila.day }} {{ fila.month }}{% endif -%}
+    </p>
+    <h1>{{ fila.title }}</h1>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap detail-body">
+    {% if fila.summary is defined and fila.summary %}
+      <p>{{ fila.summary }}</p>
+    {% elif fila.body is defined and fila.body %}
+      <p>{{ fila.body }}</p>
+    {% endif %}
+    {% if fila.place is defined and fila.place and fila.area_label is defined %}
+      <p class="detail-meta">{{ fila.area_label }} · {{ fila.place }}</p>
+    {% endif %}
+    <p class="detail-back">
+      <a class="btn btn--ghost" href="{{ url_for(volver[0]) }}">← {{ volver[1] }}</a>
+    </p>
+  </div>
+</section>
+{% endblock %}

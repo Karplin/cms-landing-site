@@ -45,7 +45,7 @@
           <span class="mondo-place">{{ voz.place }}</span>
           <span class="mondo-date">{{ voz.date_label }}</span>
         </div>
-        <h3>{{ voz.title }}</h3>
+        <h3><a href="{{ url_for('voz_detalle', item_id=voz.id) }}">{{ voz.title }}</a></h3>
         <p>{{ voz.body }}</p>
       </article>
       {% endfor %}
