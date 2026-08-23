@@ -1,0 +1,26 @@
+# Plano de despliegue para Render (https://render.com).
+# En Render: New > Blueprint, y elige este repositorio.
+services:
+  - type: web
+    name: cms-landing-site
+    runtime: docker
+    plan: free
+    healthCheckPath: /
+    envVars:
+      # Pega aquí la cadena de conexión de tu Postgres (por ejemplo, de Neon).
+      - key: DATABASE_URL
+        sync: false
+      # Render la genera sola; si la cambias, se cierran las sesiones abiertas.
+      - key: CMS_SECRET_KEY
+        generateValue: true
+      # Usuario inicial del panel: solo se usa si la base no tiene ninguno.
+      - key: CMS_ADMIN_USER
+        sync: false
+      - key: CMS_ADMIN_PASSWORD
+        sync: false
+      # Detrás de HTTPS, la cookie de sesión no viaja en claro.
+      - key: CMS_COOKIE_SECURE
+        value: "1"
+      # El plan gratuito tiene poca memoria: dos procesos van mejor que tres.
+      - key: WEB_CONCURRENCY
+        value: "2"

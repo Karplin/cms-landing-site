@@ -17,6 +17,10 @@ USER cms
 
 EXPOSE 8000
 
-# 3 procesos; el arranque espera a Postgres y siembra la base si hace falta.
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--timeout", "60", \
-     "--preload", "app:app"]
+# El puerto lo impone la plataforma (Render, Koyeb, Cloud Run...); 8000 en local.
+# --preload importa la app una sola vez: el arranque siembra la base sin carreras.
+CMD gunicorn --bind 0.0.0.0:${PORT:-8000} \
+             --workers ${WEB_CONCURRENCY:-3} \
+             --timeout 60 \
+             --preload \
+             app:app

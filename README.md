@@ -144,6 +144,41 @@ subtítulo a los proyectos:
 
 El formulario, el listado y la columna de la tabla aparecen solos.
 
+## Publicarlo en internet gratis
+
+La combinación que mejor funciona sin pagar: **Neon** para la base de datos y
+**Render** para la aplicación.
+
+### 1. Base de datos en Neon
+
+1. Crea un proyecto en <https://neon.tech> (plan gratuito).
+2. Copia la cadena de conexión. Tiene esta forma:
+   `postgresql://usuario:clave@host.neon.tech/basededatos?sslmode=require`
+
+### 2. Aplicación en Render
+
+1. En <https://render.com>: **New → Blueprint** y elige este repositorio.
+   Render lee `render.yaml` y configura el servicio solo.
+2. Rellena las variables que pide:
+   - `DATABASE_URL`: la cadena de Neon.
+   - `CMS_ADMIN_USER` y `CMS_ADMIN_PASSWORD`: el primer usuario del panel.
+3. Despliega. El primer arranque crea las tablas y siembra el contenido.
+
+El plan gratuito de Render **duerme el servicio tras unos minutos sin visitas**,
+así que la primera petición después de un rato tarda cerca de un minuto. Para un
+sitio de demostración es suficiente.
+
+### Otras opciones
+
+| Plataforma | Cómo va |
+|---|---|
+| Koyeb + Neon | Parecido a Render y no duerme el servicio; el plan gratuito es de una sola instancia. |
+| Google Cloud Run + Neon | Escala a cero y el nivel gratuito es amplio, pero pide tarjeta y algo más de configuración. |
+| Oracle Cloud Always Free | Una máquina virtual donde corre este `docker compose` tal cual, sin cambios. Es la más laboriosa y la que no duerme. |
+
+Los niveles gratuitos cambian a menudo: confirma las condiciones en cada
+plataforma antes de contar con ellas.
+
 ## Notas para producción
 
 - Cambia todas las contraseñas del `.env` y define `CMS_SECRET_KEY`.
