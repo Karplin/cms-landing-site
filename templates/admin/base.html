@@ -21,6 +21,12 @@
   </a>
 
   <nav class="side-nav" aria-label="Secciones del panel">
+    <p class="side-label">Ayuda</p>
+    <ul>
+      <li><a href="{{ url_for('admin_guide') }}"
+             {% if request.endpoint == 'admin_guide' %}aria-current="page"{% endif %}>Guía de uso</a></li>
+    </ul>
+
     <p class="side-label">Contenido</p>
     <ul>
       {% for key, spec in content_types.items() %}

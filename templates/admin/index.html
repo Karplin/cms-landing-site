@@ -10,6 +10,15 @@
   <a class="btn btn--ghost" href="{{ url_for('index') }}" target="_blank" rel="noopener">Ver el sitio ↗</a>
 </header>
 
+<a class="guide-banner" href="{{ url_for('admin_guide') }}">
+  <span class="guide-banner-icon" aria-hidden="true">?</span>
+  <span>
+    <strong>¿Primera vez por aquí?</strong>
+    Lee la guía de uso: qué controla cada apartado y cómo publicar, ordenar y ocultar.
+  </span>
+  <span class="guide-banner-go" aria-hidden="true">→</span>
+</a>
+
 <div class="tiles">
   {% for item in resumen %}
   <a class="tile" href="{{ url_for('admin_list', table=item.table) }}">

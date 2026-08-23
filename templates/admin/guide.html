@@ -1,0 +1,190 @@
+{% extends "admin/base.html" %}
+{% block title %}Guía de uso{% endblock %}
+
+{% block content %}
+<header class="page-head">
+  <div>
+    <h1>Guía de uso</h1>
+    <p class="page-help">Todo lo que se puede cambiar en el sitio, y cómo. No hace falta saber programar.</p>
+  </div>
+  <a class="btn btn--ghost" href="{{ url_for('index') }}" target="_blank" rel="noopener">Ver el sitio ↗</a>
+</header>
+
+<nav class="guide-index card" aria-label="Índice de la guía">
+  <ul>
+    <li><a href="#mapa">Qué controla cada cosa</a></li>
+    <li><a href="#tareas">Tareas paso a paso</a></li>
+    <li><a href="#orden">Ordenar y ocultar</a></li>
+    <li><a href="#textos">Consejos para los textos</a></li>
+    <li><a href="#limites">Lo que no se cambia desde aquí</a></li>
+    <li><a href="#dudas">Si algo no sale como esperas</a></li>
+  </ul>
+</nav>
+
+<!-- ============================ MAPA ============================ -->
+<section class="guide" id="mapa">
+  <h2>Qué controla cada cosa</h2>
+  <p>El sitio tiene seis páginas. Cada apartado del menú de la izquierda alimenta una zona concreta:</p>
+
+  <div class="table-wrap">
+  <table class="grid">
+    <thead><tr><th>En el panel</th><th>Dónde sale en el sitio</th></tr></thead>
+    <tbody>
+      <tr><td><a href="{{ url_for('admin_list', table='slides') }}">Diapositivas del hero</a></td>
+          <td>La franja grande de la portada, que va rotando</td></tr>
+      <tr><td><a href="{{ url_for('admin_list', table='areas') }}">Áreas de trabajo</a></td>
+          <td>Las cuatro tarjetas de la portada y la página <em>Quiénes somos</em></td></tr>
+      <tr><td><a href="{{ url_for('admin_list', table='voices') }}">Voces del territorio</a></td>
+          <td>El carrusel de la portada y la página <em>Presencia territorial</em></td></tr>
+      <tr><td><a href="{{ url_for('admin_list', table='counters') }}">Contadores</a></td>
+          <td>Las cifras grandes de la portada y de <em>Quiénes somos</em></td></tr>
+      <tr><td><a href="{{ url_for('admin_list', table='projects') }}">Proyectos</a></td>
+          <td>Las tarjetas con imagen de la portada y la página <em>Programas</em></td></tr>
+      <tr><td><a href="{{ url_for('admin_list', table='news') }}">Noticias</a> y
+              <a href="{{ url_for('admin_list', table='events') }}">Eventos</a></td>
+          <td>Las dos columnas de la portada y la página <em>Noticias y eventos</em></td></tr>
+      <tr><td><a href="{{ url_for('admin_list', table='documents') }}">Documentación</a></td>
+          <td>Boletines y memorias descargables, en la portada y en <em>Documentación</em></td></tr>
+      <tr><td><a href="{{ url_for('admin_list', table='footer_links') }}">Enlaces del pie</a> y
+              <a href="{{ url_for('admin_list', table='legal_links') }}">Enlaces legales</a></td>
+          <td>Las columnas del pie oscuro y la línea inferior, en todas las páginas</td></tr>
+      <tr><td><a href="{{ url_for('admin_sections') }}">Encabezados de sección</a></td>
+          <td>El titulillo, el título y la frase que abren cada bloque, y que titulan las páginas interiores</td></tr>
+      <tr><td><a href="{{ url_for('admin_settings') }}">Ajustes generales</a></td>
+          <td>Nombre de la organización, dirección, redes, copyright y aviso de cookies</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ============================ TAREAS ============================ -->
+<section class="guide" id="tareas">
+  <h2>Tareas paso a paso</h2>
+
+  <div class="card guide-task">
+    <h3>Publicar una noticia</h3>
+    <ol>
+      <li>Menú izquierdo → <strong>Noticias</strong>.</li>
+      <li>Botón <strong>Añadir noticia</strong>, arriba a la derecha.</li>
+      <li>Rellena el día y el mes por separado: <code>20</code> y <code>Ago</code>. Así se ve el bloque de fecha.</li>
+      <li>Escribe el titular y, si quieres, una entradilla de una o dos líneas.</li>
+      <li>Deja marcado <strong>Visible en la portada</strong> y pulsa <strong>Guardar</strong>.</li>
+    </ol>
+    <p class="guide-tip">Aparece en el sitio al instante. Abre la web en otra pestaña y refresca para comprobarlo.</p>
+  </div>
+
+  <div class="card guide-task">
+    <h3>Añadir un proyecto</h3>
+    <ol>
+      <li>Menú izquierdo → <strong>Proyectos</strong> → <strong>Añadir proyecto</strong>.</li>
+      <li><strong>Área</strong> es la etiqueta pequeña de arriba (por ejemplo <em>Educación Comunitaria</em>).</li>
+      <li><strong>Lugar</strong> es la línea gris de abajo: ciudad y país.</li>
+      <li><strong>Color de cabecera</strong> elige el tono del rectángulo superior. Alterna los cuatro para que las tarjetas no salgan todas iguales.</li>
+    </ol>
+  </div>
+
+  <div class="card guide-task">
+    <h3>Cambiar el título de una sección</h3>
+    <ol>
+      <li>Menú izquierdo → <strong>Encabezados de sección</strong>.</li>
+      <li>Cada bloque tiene tres campos: <strong>antetítulo</strong> (la línea pequeña en mayúsculas),
+          <strong>título</strong> y <strong>bajada</strong> (la frase explicativa, opcional).</li>
+      <li>Se guardan todos juntos con el botón del final.</li>
+    </ol>
+    <p class="guide-tip">Estos títulos también encabezan las páginas interiores. Si cambias
+      «Nuestros proyectos», cambia a la vez en la portada y en la cabecera de <em>Programas</em>.</p>
+  </div>
+
+  <div class="card guide-task">
+    <h3>Cambiar la dirección, el teléfono o el correo</h3>
+    <ol>
+      <li>Menú izquierdo → <strong>Ajustes generales</strong> → grupo <strong>Pie de página</strong>.</li>
+      <li>En <strong>Dirección</strong>, cada salto de línea es un renglón en el pie.</li>
+      <li>Guarda con el botón del final de la página.</li>
+    </ol>
+  </div>
+
+  <div class="card guide-task">
+    <h3>Dar acceso a otra persona</h3>
+    <ol>
+      <li>Menú izquierdo → <strong>Usuarios</strong> → <strong>Añadir usuario</strong>.</li>
+      <li>Pon su usuario, su nombre y una contraseña de al menos ocho caracteres.</li>
+      <li>Pásale esos datos y dile que la cambie desde <strong>Mi contraseña</strong>.</li>
+    </ol>
+    <p class="guide-tip">Para retirar el acceso sin borrar la cuenta, edítala y desmarca
+      <strong>Cuenta activa</strong>. Nadie puede desactivarse ni borrarse a sí mismo.</p>
+  </div>
+
+  <div class="card guide-task">
+    <h3>Cambiar tu contraseña</h3>
+    <ol>
+      <li>Menú izquierdo → <strong>Mi contraseña</strong>.</li>
+      <li>Escribe la actual y la nueva dos veces. Mínimo ocho caracteres.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================ ORDEN ============================ -->
+<section class="guide" id="orden">
+  <h2>Ordenar y ocultar</h2>
+  <p>En cualquier listado tienes estos controles en cada fila:</p>
+  <ul class="guide-list">
+    <li><strong>↑ ↓</strong> — suben o bajan el registro. El orden del listado es el orden en el sitio.</li>
+    <li><strong>Publicado / Oculto</strong> — pulsa la etiqueta para cambiarlo. Lo oculto desaparece
+      del sitio pero <em>no</em> se borra: puedes volver a mostrarlo cuando quieras.</li>
+    <li><strong>Editar</strong> — abre el formulario.</li>
+    <li><strong>Eliminar</strong> — borra de verdad, pide confirmación y no se puede deshacer.</li>
+  </ul>
+  <p class="guide-tip">Cuando dudes entre ocultar y eliminar, oculta. Es reversible.</p>
+</section>
+
+<!-- ============================ TEXTOS ============================ -->
+<section class="guide" id="textos">
+  <h2>Consejos para los textos</h2>
+  <ul class="guide-list">
+    <li><strong>Titulares cortos.</strong> Dos líneas como mucho. Los muy largos descuadran las tarjetas.</li>
+    <li><strong>Entradillas de una o dos frases.</strong> El sitio no recorta el texto: lo que escribas se ve entero.</li>
+    <li><strong>Fechas abreviadas</strong> en el mes: <code>Ene</code>, <code>Feb</code>, <code>Mar</code>…</li>
+    <li><strong>Cifras con el separador que prefieras.</strong> Los contadores se muestran tal cual los escribas.</li>
+    <li><strong>Mantén un número par de tarjetas</strong> en áreas y proyectos (dos o cuatro): la rejilla queda cuadrada.</li>
+  </ul>
+</section>
+
+<!-- ============================ LÍMITES ============================ -->
+<section class="guide" id="limites">
+  <h2>Lo que no se cambia desde aquí</h2>
+  <p>Estas cosas están en el código y necesitan a alguien técnico:</p>
+  <ul class="guide-list">
+    <li>Las entradas del <strong>menú principal</strong> y las páginas que existen.</li>
+    <li>Los <strong>colores</strong> y las <strong>tipografías</strong>.</li>
+    <li>Subir <strong>fotografías</strong>: hoy las cabeceras de proyecto son bloques de color, no imágenes.</li>
+    <li>Añadir <strong>campos nuevos</strong> a un tipo de contenido.</li>
+  </ul>
+</section>
+
+<!-- ============================ DUDAS ============================ -->
+<section class="guide" id="dudas">
+  <h2>Si algo no sale como esperas</h2>
+
+  <dl class="guide-faq">
+    <dt>He guardado y no veo el cambio en el sitio</dt>
+    <dd>Refresca la página del sitio. Si sigue igual, comprueba que el registro esté en
+      <strong>Publicado</strong> y no en <strong>Oculto</strong>.</dd>
+
+    <dt>La web tarda muchísimo en abrir la primera vez</dt>
+    <dd>Es normal en el alojamiento gratuito: el servidor se apaga tras un rato sin visitas y
+      la primera petición lo despierta. Puede tardar cerca de un minuto. Las siguientes van rápidas.</dd>
+
+    <dt>He olvidado mi contraseña</dt>
+    <dd>Pídele a otra persona con acceso que te la cambie desde <strong>Usuarios</strong>.
+      Si eres la única, hace falta alguien técnico para restablecerla.</dd>
+
+    <dt>Una sección entera ha desaparecido del sitio</dt>
+    <dd>Si ocultas o borras todos los registros de un tipo, esa sección deja de mostrarse.
+      Vuelve a publicar al menos uno y reaparece.</dd>
+
+    <dt>He borrado algo sin querer</dt>
+    <dd>No hay papelera: hay que volver a crearlo. Por eso conviene ocultar en vez de borrar.</dd>
+  </dl>
+</section>
+{% endblock %}

@@ -257,6 +257,13 @@ def admin_home():
     return render_template("admin/index.html", resumen=resumen)
 
 
+@app.route("/admin/guia")
+@login_required
+def admin_guide():
+    """Manual de uso, dentro del propio panel."""
+    return render_template("admin/guide.html")
+
+
 # ---------------------------------------------------------------------------
 # Panel: contenido genérico
 # ---------------------------------------------------------------------------
