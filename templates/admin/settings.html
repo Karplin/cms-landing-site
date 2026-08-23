@@ -1,0 +1,27 @@
+{% extends "admin/base.html" %}
+{% from "admin/_fields.html" import field %}
+{% block title %}Ajustes generales{% endblock %}
+
+{% block content %}
+<header class="page-head">
+  <div>
+    <h1>Ajustes generales</h1>
+    <p class="page-help">Textos fijos de la portada: identidad, cabecera, pie y aviso de cookies.</p>
+  </div>
+</header>
+
+<form method="post">
+  {% for group in groups %}
+  <fieldset class="card group">
+    <legend>{{ group.label }}</legend>
+    {% for f in group.fields %}
+      {{ field(f, values.get(f.name)) }}
+    {% endfor %}
+  </fieldset>
+  {% endfor %}
+
+  <div class="form-actions form-actions--sticky">
+    <button class="btn" type="submit">Guardar ajustes</button>
+  </div>
+</form>
+{% endblock %}

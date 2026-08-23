@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% from "_macros.html" import banner, tarjeta_proyecto with context %}
+{% block title %}{{ sections.projects.title }} · {{ settings.site_title }}{% endblock %}
+
+{% block content %}
+{{ banner('projects') }}
+
+<section class="band">
+  <div class="wrap">
+    {% if projects %}
+    <div class="projects">
+      {% for proyecto in projects %}{{ tarjeta_proyecto(proyecto) }}{% endfor %}
+    </div>
+    {% else %}
+    <p class="empty-note">Todavía no hay proyectos publicados.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

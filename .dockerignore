@@ -1,0 +1,8 @@
+.git
+.venv
+__pycache__/
+*.pyc
+cms.db
+.env
+.idea
+.DS_Store

@@ -1,0 +1,115 @@
+{# Piezas compartidas entre la portada y las páginas interiores. #}
+
+{% macro emblema() -%}
+<svg viewBox="0 0 40 46" fill="none" aria-hidden="true">
+  <path d="M20 2 4 9v13c0 10.5 6.7 19.4 16 22 9.3-2.6 16-11.5 16-22V9L20 2Z" stroke="currentColor" stroke-width="1.6"/>
+  <path d="M20 11v20M11 21h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+</svg>
+{%- endmacro %}
+
+{% macro icono_youtube() -%}
+<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23 12s0-3.8-.5-5.6a3 3 0 0 0-2.1-2.1C18.6 3.8 12 3.8 12 3.8s-6.6 0-8.4.5A3 3 0 0 0 1.5 6.4C1 8.2 1 12 1 12s0 3.8.5 5.6a3 3 0 0 0 2.1 2.1c1.8.5 8.4.5 8.4.5s6.6 0 8.4-.5a3 3 0 0 0 2.1-2.1C23 15.8 23 12 23 12ZM9.8 15.5v-7l6.1 3.5-6.1 3.5Z"/></svg>
+{%- endmacro %}
+
+{% macro icono_area(nombre) -%}
+<svg class="area-mark" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+{%- if nombre == 'salud' %}
+  <path d="M24 41S8 31.5 8 20.5A8.5 8.5 0 0 1 24 16a8.5 8.5 0 0 1 16 4.5C40 31.5 24 41 24 41Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+  <path d="M24 21v8M20 25h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+{%- elif nombre == 'agua' %}
+  <path d="M24 6c7 8.5 11 14.6 11 19.6A11 11 0 0 1 13 25.6C13 20.6 17 14.5 24 6Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+  <path d="M19 26.5a5 5 0 0 0 5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+  <path d="M10 40h28" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+{%- elif nombre == 'liderazgo' %}
+  <circle cx="18" cy="17" r="6" stroke="currentColor" stroke-width="1.7"/>
+  <path d="M7 39c0-6.1 4.9-11 11-11s11 4.9 11 11" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+  <path d="M32 14a6 6 0 0 1 0 12M34 30c4.1 1.9 7 6 7 9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+{%- else %}
+  <path d="M6 14 24 7l18 7-18 7-18-7Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+  <path d="M12 18v10c0 3.3 5.4 6 12 6s12-2.7 12-6V18" stroke="currentColor" stroke-width="1.7"/>
+  <path d="M42 14v11" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+{%- endif %}
+</svg>
+{%- endmacro %}
+
+{# Encabezado centrado de sección, tal como se edita en el panel. #}
+{% macro encabezado(clave) -%}
+{% set s = sections.get(clave, {}) %}
+<div class="sec-head">
+  {% if s.eyebrow %}<p class="eyebrow">{{ s.eyebrow }}</p>{% endif %}
+  <h2>{{ s.title }}</h2>
+  <span class="rule" aria-hidden="true"></span>
+  {% if s.subtitle %}<p class="sub">{{ s.subtitle }}</p>{% endif %}
+</div>
+{%- endmacro %}
+
+{# Franja superior de las páginas interiores. #}
+{% macro banner(clave) -%}
+{% set s = sections.get(clave, {}) %}
+<section class="page-banner">
+  <div class="wrap">
+    {% if s.eyebrow %}<p class="eyebrow">{{ s.eyebrow }}</p>{% endif %}
+    <h1>{{ s.title }}</h1>
+    {% if s.subtitle %}<p class="lead">{{ s.subtitle }}</p>{% endif %}
+  </div>
+</section>
+{%- endmacro %}
+
+{% macro tarjeta_area(area) -%}
+<article class="area">
+  {{ icono_area(area.icon) }}
+  <h3>{{ area.title }}</h3>
+  <p>{{ area.body }}</p>
+  {% if area.link_label %}
+  <a class="link-more" href="{{ area.link_href or '#' }}">{{ area.link_label }}</a>
+  {% endif %}
+</article>
+{%- endmacro %}
+
+{% macro tarjeta_voz(voz) -%}
+<article class="voice">
+  <div class="voice-head">
+    <span class="voice-place">{{ voz.place }}</span>
+    <span class="voice-date">{{ voz.date_label }}</span>
+  </div>
+  <h3>{{ voz.title }}</h3>
+  <p>{{ voz.body }}</p>
+</article>
+{%- endmacro %}
+
+{% macro tarjeta_proyecto(proyecto) -%}
+<article class="project">
+  <div class="project-visual" data-tone="{{ proyecto.tone }}" aria-hidden="true"></div>
+  <div class="project-body">
+    <p class="project-area">{{ proyecto.area_label }}</p>
+    <h3>{{ proyecto.title }}</h3>
+    <p class="place">{{ proyecto.place }}</p>
+    <a class="link-more" href="{{ proyecto.href or '#' }}">Ver el proyecto</a>
+  </div>
+</article>
+{%- endmacro %}
+
+{% macro item_fecha(item) -%}
+<li class="item">
+  <div class="item-date"><p class="d">{{ item.day }}</p><p class="m">{{ item.month }}</p></div>
+  <a href="{{ item.href or '#' }}">
+    <h4>{{ item.title }}</h4>
+    {% if item.summary %}<p>{{ item.summary }}</p>{% endif %}
+  </a>
+</li>
+{%- endmacro %}
+
+{% macro fila_doc(doc) -%}
+<li class="doc">
+  {% if doc.doc_group == 'memoria' %}
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4h7a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H4V4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M20 4h-7a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H20V4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+  {% else %}
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 2h8l5 5v15H6V2Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M14 2v5h5" stroke="currentColor" stroke-width="1.6"/></svg>
+  {% endif %}
+  <div>
+    <p class="title">{{ doc.title }}</p>
+    {% if doc.meta %}<p class="meta">{{ doc.meta }}</p>{% endif %}
+  </div>
+  <a class="dl" href="{{ doc.href or '#' }}">{{ doc.size_label }}</a>
+</li>
+{%- endmacro %}

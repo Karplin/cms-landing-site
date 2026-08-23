@@ -1,0 +1,30 @@
+{# Render generico de un campo del esquema. `prefix` permite varios registros
+   en un mismo formulario (los encabezados de seccion). #}
+{% macro field(spec, value, prefix='') %}
+{% set name = prefix ~ spec.name %}
+<div class="field field--{{ spec.type }}">
+  <label for="{{ name }}">{{ spec.label }}{% if spec.required %} <span class="req" title="Obligatorio">*</span>{% endif %}</label>
+
+  {% if spec.type == 'textarea' %}
+    <textarea id="{{ name }}" name="{{ name }}" rows="{{ spec.rows | default(3) }}"
+              {% if spec.required %}required{% endif %}>{{ value or '' }}</textarea>
+
+  {% elif spec.type == 'select' %}
+    <select id="{{ name }}" name="{{ name }}">
+      {% for opt_value, opt_label in spec.options %}
+      <option value="{{ opt_value }}" {% if (value or '') == opt_value %}selected{% endif %}>{{ opt_label }}</option>
+      {% endfor %}
+    </select>
+
+  {% elif spec.type == 'number' %}
+    <input id="{{ name }}" name="{{ name }}" type="number" value="{{ value if value is not none else '' }}"
+           {% if spec.required %}required{% endif %}>
+
+  {% else %}
+    <input id="{{ name }}" name="{{ name }}" type="text" value="{{ value or '' }}"
+           {% if spec.required %}required{% endif %}>
+  {% endif %}
+
+  {% if spec.help %}<p class="hint">{{ spec.help }}</p>{% endif %}
+</div>
+{% endmacro %}

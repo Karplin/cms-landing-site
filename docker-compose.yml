@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: cms-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-cms}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-cms}
+      POSTGRES_DB: ${POSTGRES_DB:-cms}
+    ports:
+      # 5433 fuera para no chocar con un Postgres instalado en la máquina.
+      - "${DB_PORT:-5433}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cms} -d ${POSTGRES_DB:-cms}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build: .
+    container_name: cms-web
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-cms}:${POSTGRES_PASSWORD:-cms}@db:5432/${POSTGRES_DB:-cms}
+      CMS_SECRET_KEY: ${CMS_SECRET_KEY:-}
+      CMS_ADMIN_USER: ${CMS_ADMIN_USER:-admin}
+      CMS_ADMIN_PASSWORD: ${CMS_ADMIN_PASSWORD:-admin1234}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${WEB_PORT:-5050}:8000"
+
+volumes:
+  pgdata:

@@ -1,0 +1,13 @@
+# Entorno
+.venv/
+__pycache__/
+*.pyc
+
+# Datos locales
+cms.db
+.env
+
+# Editor / sistema
+.idea/
+.vscode/
+.DS_Store

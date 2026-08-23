@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado, tarjeta_area, tarjeta_voz, tarjeta_proyecto, item_fecha, fila_doc with context %}
+
+{% block content %}
+
+{# ============================ HERO ============================ #}
+{% if slides %}
+<section class="hero" aria-roledescription="carrusel" aria-label="Destacados">
+  <div class="hero-bg" aria-hidden="true"></div>
+
+  {% for slide in slides %}
+  <article class="slide"{% if loop.first %} data-active="true"{% endif %}
+           aria-roledescription="diapositiva" aria-label="{{ loop.index }} de {{ slides|length }}">
+    <div>
+      <h1 class="slide-title">{{ slide.title_light }}{% if slide.title_strong %}<strong>{{ slide.title_strong|nl2br }}</strong>{% endif %}</h1>
+      {% if slide.meta %}<p class="slide-meta">{{ slide.meta }}</p>{% endif %}
+      {% if slide.cta_label %}
+      <p class="slide-cta"><a class="btn" href="{{ slide.cta_href or '#' }}">{{ slide.cta_label }}
+        {%- if slide.cta_icon == 'play' %}
+        <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM6.4 11.6V4.4L12 8l-5.6 3.6Z"/></svg>
+        {%- elif slide.cta_icon == 'download' %}
+        <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M7.2 0v9.1L4.5 6.4 3.3 7.6 8 12.3l4.7-4.7-1.2-1.2-2.7 2.7V0H7.2ZM1 14v2h14v-2H1Z"/></svg>
+        {%- endif %}
+      </a></p>
+      {% endif %}
+    </div>
+    <div>
+      {% if slide.quote_strong or slide.quote_rest %}
+      <blockquote class="slide-quote">{{ slide.quote_strong }} <span>{{ slide.quote_rest }}</span></blockquote>
+      {% endif %}
+      {% if slide.author %}<p class="slide-author">{{ slide.author }}</p>{% endif %}
+    </div>
+  </article>
+  {% endfor %}
+
+  {% if slides|length > 1 %}
+  <div class="dots" role="tablist" aria-label="Diapositivas">
+    {% for slide in slides %}
+    <button role="tab" aria-selected="{{ 'true' if loop.first else 'false' }}"
+            aria-label="Diapositiva {{ loop.index }}"></button>
+    {% endfor %}
+  </div>
+  {% endif %}
+</section>
+{% endif %}
+
+{# ============================ ÁREAS ============================ #}
+{% if areas %}
+<section class="band band--cream">
+  <div class="wrap">
+    {{ encabezado('areas') }}
+    <div class="areas">
+      {% for area in areas %}{{ tarjeta_area(area) }}{% endfor %}
+    </div>
+    <p class="band-cta"><a class="btn btn--ghost" href="{{ url_for('quienes_somos') }}">Conocer el instituto</a></p>
+  </div>
+</section>
+{% endif %}
+
+{# ============================ VOCES ============================ #}
+{% if voices %}
+<section class="band band--cream band--tight">
+  <div class="wrap">
+    {{ encabezado('voices') }}
+    <div class="voices">
+      {% for voz in voices %}{{ tarjeta_voz(voz) }}{% endfor %}
+    </div>
+    <p class="band-cta"><a class="btn btn--ghost" href="{{ url_for('territorio') }}">Ver todas las sedes</a></p>
+  </div>
+</section>
+{% endif %}
+
+{# ============================ CONTADORES ============================ #}
+{% if counters %}
+<section class="band band--cream band--tight">
+  <div class="wrap">
+    {{ encabezado('counters') }}
+    <div class="counters">
+      {% for contador in counters %}
+      <div class="counter">
+        <p class="num">{{ contador.number }}</p>
+        <p class="label">{{ contador.label }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ============================ PROYECTOS ============================ #}
+{% if projects %}
+<section class="band">
+  <div class="wrap">
+    {{ encabezado('projects') }}
+    <div class="projects">
+      {% for proyecto in projects %}{{ tarjeta_proyecto(proyecto) }}{% endfor %}
+    </div>
+    <p class="band-cta">
+      <a class="btn btn--ghost" href="{{ url_for('programas') }}">{{ settings.projects_cta_label }}</a>
+    </p>
+  </div>
+</section>
+{% endif %}
+
+{# ============================ NOTICIAS Y EVENTOS ============================ #}
+{% if news or events %}
+<section class="band band--alt">
+  <div class="wrap">
+    {{ encabezado('news') }}
+    <div class="news-grid">
+      <div>
+        <div class="col-head">
+          <h3>{{ settings.news_col_title }}</h3>
+          <a class="link-more" href="{{ url_for('noticias') }}">{{ settings.news_col_link }}</a>
+        </div>
+        <ul class="item-list">
+          {% for nota in news %}{{ item_fecha(nota) }}{% endfor %}
+        </ul>
+      </div>
+      <div>
+        <div class="col-head">
+          <h3>{{ settings.events_col_title }}</h3>
+          <a class="link-more" href="{{ url_for('noticias') }}">{{ settings.events_col_link }}</a>
+        </div>
+        <ul class="item-list">
+          {% for evento in events %}{{ item_fecha(evento) }}{% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ============================ DOCUMENTACIÓN ============================ #}
+{% if bulletins or reports %}
+<section class="band">
+  <div class="wrap">
+    {{ encabezado('documents') }}
+    <div class="docs">
+      <div>
+        <div class="col-head">
+          <h3>{{ settings.docs_col1_title }}</h3>
+          <a class="link-more" href="{{ url_for('documentacion') }}">{{ settings.docs_col1_link }}</a>
+        </div>
+        <ul class="doc-list">{% for doc in bulletins %}{{ fila_doc(doc) }}{% endfor %}</ul>
+      </div>
+      <div>
+        <div class="col-head">
+          <h3>{{ settings.docs_col2_title }}</h3>
+          <a class="link-more" href="{{ url_for('documentacion') }}">{{ settings.docs_col2_link }}</a>
+        </div>
+        <ul class="doc-list">{% for doc in reports %}{{ fila_doc(doc) }}{% endfor %}</ul>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}

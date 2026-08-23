@@ -1,0 +1,65 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ spec.label }}{% endblock %}
+
+{% block content %}
+<header class="page-head">
+  <div>
+    <h1>{{ spec.label }}</h1>
+    {% if spec.help %}<p class="page-help">{{ spec.help }}</p>{% endif %}
+  </div>
+  <a class="btn" href="{{ url_for('admin_create', table=table) }}">Añadir {{ spec.singular }}</a>
+</header>
+
+{% if rows %}
+<div class="table-wrap">
+<table class="grid">
+  <thead>
+    <tr>
+      <th class="col-order">Orden</th>
+      {% for column in spec.list_columns %}
+        {% for f in spec.fields %}{% if f.name == column %}<th>{{ f.label }}</th>{% endif %}{% endfor %}
+      {% endfor %}
+      <th>Estado</th>
+      <th class="col-actions">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in rows %}
+    <tr {% if not row.published %}class="is-hidden"{% endif %}>
+      <td class="col-order">
+        <form method="post" action="{{ url_for('admin_move', table=table, row_id=row.id, direction='up') }}">
+          <button type="submit" title="Subir" {% if loop.first %}disabled{% endif %}>↑</button>
+        </form>
+        <form method="post" action="{{ url_for('admin_move', table=table, row_id=row.id, direction='down') }}">
+          <button type="submit" title="Bajar" {% if loop.last %}disabled{% endif %}>↓</button>
+        </form>
+      </td>
+
+      {% for column in spec.list_columns %}
+      <td>{{ row[column] }}</td>
+      {% endfor %}
+
+      <td>
+        <form method="post" action="{{ url_for('admin_toggle', table=table, row_id=row.id) }}">
+          <button class="pill {{ 'pill--on' if row.published else 'pill--off' }}" type="submit">
+            {{ 'Publicado' if row.published else 'Oculto' }}
+          </button>
+        </form>
+      </td>
+
+      <td class="col-actions">
+        <a class="link" href="{{ url_for('admin_edit', table=table, row_id=row.id) }}">Editar</a>
+        <form method="post" action="{{ url_for('admin_delete', table=table, row_id=row.id) }}"
+              onsubmit="return confirm('¿Eliminar este registro? No se puede deshacer.');">
+          <button class="link link--danger" type="submit">Eliminar</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}
+<p class="empty">Todavía no hay registros. Añade el primero para que la sección aparezca en la portada.</p>
+{% endif %}
+{% endblock %}

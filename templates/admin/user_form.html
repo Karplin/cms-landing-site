@@ -1,0 +1,53 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ 'Nuevo usuario' if is_new else 'Editar usuario' }}{% endblock %}
+
+{% block content %}
+<header class="page-head">
+  <div>
+    <p class="crumb"><a href="{{ url_for('admin_users') }}">Usuarios</a></p>
+    <h1>{{ 'Nuevo usuario' if is_new else 'Editar usuario' }}</h1>
+  </div>
+</header>
+
+<form class="card form form--narrow" method="post">
+  <div class="field">
+    <label for="username">Usuario <span class="req" title="Obligatorio">*</span></label>
+    <input id="username" name="username" type="text" value="{{ user.username }}"
+           autocapitalize="none" spellcheck="false" required>
+    <p class="hint">Sin espacios. Se guarda en minúsculas.</p>
+  </div>
+
+  <div class="field">
+    <label for="name">Nombre</label>
+    <input id="name" name="name" type="text" value="{{ user.name }}">
+  </div>
+
+  <div class="field">
+    <label for="role">Rol</label>
+    <select id="role" name="role">
+      {% for valor, etiqueta in roles %}
+      <option value="{{ valor }}" {% if user.role == valor %}selected{% endif %}>{{ etiqueta }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="password">Contraseña{% if is_new %} <span class="req" title="Obligatorio">*</span>{% endif %}</label>
+    <input id="password" name="password" type="password" autocomplete="new-password"
+           minlength="8" {% if is_new %}required{% endif %}>
+    <p class="hint">{% if is_new %}Mínimo ocho caracteres.{% else %}Déjala vacía para no cambiarla.{% endif %}</p>
+  </div>
+
+  <div class="field field--check">
+    <label class="check">
+      <input type="checkbox" name="active" value="1" {% if user.active %}checked{% endif %}>
+      <span>Cuenta activa</span>
+    </label>
+  </div>
+
+  <div class="form-actions">
+    <button class="btn" type="submit">Guardar</button>
+    <a class="btn btn--ghost" href="{{ url_for('admin_users') }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

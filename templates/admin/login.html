@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Acceso · CMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body class="login-page">
+
+<main class="login-box">
+  <svg class="login-mark" viewBox="0 0 40 46" fill="none" aria-hidden="true">
+    <path d="M20 2 4 9v13c0 10.5 6.7 19.4 16 22 9.3-2.6 16-11.5 16-22V9L20 2Z" stroke="currentColor" stroke-width="1.6"/>
+    <path d="M20 11v20M11 21h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+  </svg>
+  <h1>Gestor de contenidos</h1>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <p class="flash flash--{{ category }}">{{ message }}</p>
+    {% endfor %}
+  {% endwith %}
+
+  <form method="post">
+    <div class="field">
+      <label for="username">Usuario</label>
+      <input id="username" name="username" type="text" autocomplete="username"
+             autocapitalize="none" spellcheck="false" autofocus required>
+    </div>
+    <div class="field">
+      <label for="password">Contraseña</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required>
+    </div>
+    <button class="btn" type="submit">Entrar</button>
+  </form>
+
+  <p class="login-back"><a href="{{ url_for('index') }}">← Volver al sitio</a></p>
+</main>
+
+</body>
+</html>

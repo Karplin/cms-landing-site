@@ -1,0 +1,272 @@
+/* ============================================================
+   Panel de administración — misma familia visual que la portada,
+   pero con tratamiento utilitario: densidad alta y foco en la tabla.
+   ============================================================ */
+
+:root{
+  --bg:#F7F5F0;
+  --surface:#FFFFFF;
+  --text:#1B2A2F;
+  --text-soft:#54666C;
+  --text-faint:#8A9AA0;
+  --accent:#B07C22;
+  --accent-ink:#8A5F14;
+  --panel:#2E545F;
+  --panel-deep:#22404A;
+  --panel-text:#E7EEEF;
+  --panel-soft:#A7BEC3;
+  --line:rgba(27,42,47,.14);
+  --line-strong:rgba(27,42,47,.26);
+  --ok-bg:#E8F1E9; --ok-text:#255D34;
+  --err-bg:#F8E7E7; --err-text:#8B2020;
+  --side-w:246px;
+}
+
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0F1618;
+    --surface:#182123;
+    --text:#EBE5D9;
+    --text-soft:#AEBDC0;
+    --text-faint:#7E8F93;
+    --accent:#D9A548;
+    --accent-ink:#E7BC6C;
+    --panel:#12292F;
+    --panel-deep:#0C1D22;
+    --panel-text:#E2ECEE;
+    --panel-soft:#9FB8BD;
+    --line:rgba(235,229,217,.16);
+    --line-strong:rgba(235,229,217,.3);
+    --ok-bg:#17301F; --ok-text:#9AD3A9;
+    --err-bg:#37191A; --err-text:#F0A6A6;
+  }
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Montserrat,"Helvetica Neue",Arial,sans-serif;
+  font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none;}
+h1,h2,h3,h4,legend{margin:0;}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px;}
+
+/* ---------------- Barra lateral ---------------- */
+.admin{display:grid;grid-template-columns:var(--side-w) 1fr;min-height:100vh;}
+
+.side{
+  background:var(--panel);color:var(--panel-text);
+  display:flex;flex-direction:column;gap:26px;
+  padding:24px 0 20px;position:sticky;top:0;height:100vh;overflow-y:auto;
+}
+.side-brand{display:flex;align-items:center;gap:12px;padding:0 22px;}
+.side-brand svg{width:30px;height:34px;flex:none;}
+.side-brand span{
+  font-family:"Abhaya Libre",Georgia,serif;font-size:17px;font-weight:600;line-height:1.1;
+}
+.side-nav{flex:1;}
+.side-label{
+  margin:0 22px 8px;font-size:10px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--panel-soft);
+}
+.side-nav ul{list-style:none;margin:0 0 22px;padding:0;}
+.side-nav a{
+  display:block;padding:8px 22px;font-size:13px;color:var(--panel-soft);
+  border-left:3px solid transparent;
+}
+.side-nav a:hover{color:#FFFFFF;background:rgba(255,255,255,.05);}
+.side-nav a[aria-current="page"]{
+  color:#FFFFFF;border-left-color:var(--accent);background:rgba(255,255,255,.08);
+}
+.side-foot{
+  padding:18px 22px 0;border-top:1px solid rgba(255,255,255,.14);
+  display:flex;flex-direction:column;gap:10px;align-items:flex-start;
+}
+.side-user{
+  margin:0 0 4px;font-size:12.5px;font-weight:600;color:var(--panel-text);line-height:1.4;
+}
+.side-user span{font-weight:400;font-size:11px;color:var(--panel-soft);}
+.side-view{font-size:12px;color:var(--panel-soft);}
+.side-view:hover{color:#FFFFFF;}
+.side-out{
+  background:none;border:0;padding:0;cursor:pointer;font:inherit;
+  font-size:12px;color:var(--panel-soft);
+}
+.side-out:hover{color:#FFFFFF;text-decoration:underline;}
+
+/* ---------------- Área principal ---------------- */
+.main{padding:34px 40px 72px;max-width:1080px;}
+
+.page-head{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:24px;
+  padding-bottom:18px;margin-bottom:26px;border-bottom:1px solid var(--line);
+}
+.page-head h1{
+  font-family:"Abhaya Libre",Georgia,serif;font-size:30px;font-weight:600;line-height:1.15;
+}
+.page-help{margin:6px 0 0;color:var(--text-soft);font-size:13px;max-width:60ch;}
+.crumb{margin:0 0 4px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;}
+.crumb a{color:var(--accent-ink);}
+.crumb a:hover{text-decoration:underline;}
+
+/* ---------------- Avisos ---------------- */
+.flashes{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.flash{margin:0;padding:10px 14px;border-radius:3px;font-size:13px;}
+.flash--ok{background:var(--ok-bg);color:var(--ok-text);}
+.flash--error{background:var(--err-bg);color:var(--err-text);}
+.flash--message{background:var(--surface);border:1px solid var(--line);}
+
+/* ---------------- Botones ---------------- */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 22px;border:0;border-radius:2px;cursor:pointer;
+  background:var(--accent);color:#1B1206;
+  font-family:inherit;font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+}
+.btn:hover{background:var(--accent-ink);color:#FFF6E4;}
+.btn--ghost{background:transparent;color:var(--text);border:1px solid var(--line-strong);}
+.btn--ghost:hover{background:var(--text);color:var(--bg);}
+
+.link{
+  background:none;border:0;padding:0;cursor:pointer;font:inherit;
+  font-size:12.5px;color:var(--accent-ink);
+}
+.link:hover{text-decoration:underline;}
+.link--danger{color:#A33;}
+
+/* ---------------- Tabla ---------------- */
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface);}
+.grid{width:100%;border-collapse:collapse;font-size:13px;}
+.grid th{
+  text-align:left;padding:12px 14px;border-bottom:1px solid var(--line-strong);
+  font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-soft);
+  white-space:nowrap;
+}
+.grid td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle;}
+.grid tr:last-child td{border-bottom:0;}
+.grid tr.is-hidden td{opacity:.5;}
+
+.col-order{width:74px;white-space:nowrap;}
+.col-order form{display:inline;}
+.col-order button{
+  background:none;border:1px solid var(--line);border-radius:2px;cursor:pointer;
+  width:24px;height:24px;line-height:1;color:var(--text-soft);font-size:12px;
+}
+.col-order button:hover:not(:disabled){border-color:var(--accent);color:var(--accent-ink);}
+.col-order button:disabled{opacity:.3;cursor:default;}
+
+.col-actions{white-space:nowrap;text-align:right;}
+.col-actions form{display:inline;margin-left:14px;}
+
+.pill{
+  border:1px solid var(--line-strong);border-radius:999px;cursor:pointer;
+  padding:3px 12px;font:inherit;font-size:10.5px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;background:none;
+}
+.pill--on{color:var(--ok-text);border-color:var(--ok-text);}
+.pill--off{color:var(--text-faint);}
+.pill:hover{background:rgba(128,128,128,.1);}
+
+.tag{
+  margin-left:8px;padding:2px 8px;border-radius:999px;
+  background:var(--accent);color:#1B1206;
+  font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+}
+
+.empty{
+  padding:34px;border:1px dashed var(--line-strong);border-radius:3px;
+  text-align:center;color:var(--text-soft);
+}
+
+/* ---------------- Formularios ---------------- */
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:3px;
+  padding:26px 28px;
+}
+.form{display:flex;flex-direction:column;gap:18px;}
+.form--narrow{max-width:440px;}
+.group{margin:0 0 20px;border:1px solid var(--line);}
+.group legend{
+  padding:0 10px;margin-left:-10px;
+  font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-ink);
+}
+.group .field{margin-top:16px;}
+
+.field{display:flex;flex-direction:column;gap:6px;}
+.field label{font-size:12px;font-weight:600;color:var(--text-soft);}
+.field .req{color:#A33;}
+.field input[type="text"],
+.field input[type="password"],
+.field input[type="number"],
+.field textarea,
+.field select{
+  width:100%;padding:9px 12px;font:inherit;font-size:13.5px;
+  color:var(--text);background:var(--bg);
+  border:1px solid var(--line-strong);border-radius:2px;
+}
+.field textarea{resize:vertical;line-height:1.55;}
+.field input:focus,.field textarea:focus,.field select:focus{
+  outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(176,124,34,.16);
+}
+.hint{margin:0;font-size:11.5px;color:var(--text-faint);}
+
+.check{flex-direction:row;align-items:center;gap:10px;display:flex;cursor:pointer;}
+.check input{width:16px;height:16px;accent-color:var(--accent);}
+.check span{font-size:13px;color:var(--text);}
+
+.form-actions{display:flex;align-items:center;gap:14px;margin-top:6px;}
+.form-actions--sticky{
+  position:sticky;bottom:0;background:var(--bg);
+  padding:16px 0;border-top:1px solid var(--line);
+}
+
+/* ---------------- Inicio del panel ---------------- */
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px;margin-bottom:28px;}
+.tile{
+  background:var(--surface);border:1px solid var(--line);border-radius:3px;
+  padding:20px 22px;display:flex;flex-direction:column;gap:4px;
+  transition:border-color .2s ease;
+}
+.tile:hover{border-color:var(--accent);}
+.tile-num{
+  font-family:"Abhaya Libre",Georgia,serif;font-size:32px;font-weight:700;line-height:1;
+  color:var(--accent-ink);font-variant-numeric:tabular-nums;
+}
+.tile-label{font-size:12.5px;color:var(--text-soft);}
+
+.note h2{
+  font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent-ink);margin-bottom:12px;
+}
+.note ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:8px;
+  font-size:13px;color:var(--text-soft);}
+.note strong{color:var(--text);}
+
+/* ---------------- Acceso ---------------- */
+.login-page{
+  min-height:100vh;display:grid;place-items:center;padding:24px;
+  background:var(--panel);
+}
+.login-box{
+  width:100%;max-width:380px;background:var(--surface);
+  border-radius:3px;padding:38px 34px 30px;
+  display:flex;flex-direction:column;gap:18px;
+}
+.login-mark{width:36px;height:41px;color:var(--accent-ink);}
+.login-box h1{
+  font-family:"Abhaya Libre",Georgia,serif;font-size:26px;font-weight:600;line-height:1.1;
+}
+.login-box form{display:flex;flex-direction:column;gap:16px;}
+.login-box .btn{justify-content:center;}
+.login-back{margin:0;font-size:12px;}
+.login-back a{color:var(--text-faint);}
+.login-back a:hover{color:var(--accent-ink);}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width:860px){
+  .admin{grid-template-columns:1fr;}
+  .side{position:static;height:auto;flex-direction:column;}
+  .main{padding:26px 20px 60px;}
+  .page-head{flex-direction:column;align-items:flex-start;}
+}

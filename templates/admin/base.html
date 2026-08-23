@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Panel{% endblock %} · CMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body class="admin">
+
+<aside class="side">
+  <a class="side-brand" href="{{ url_for('admin_home') }}">
+    <svg viewBox="0 0 40 46" fill="none" aria-hidden="true">
+      <path d="M20 2 4 9v13c0 10.5 6.7 19.4 16 22 9.3-2.6 16-11.5 16-22V9L20 2Z" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M20 11v20M11 21h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span>Gestor de<br>contenidos</span>
+  </a>
+
+  <nav class="side-nav" aria-label="Secciones del panel">
+    <p class="side-label">Contenido</p>
+    <ul>
+      {% for key, spec in content_types.items() %}
+      <li><a href="{{ url_for('admin_list', table=key) }}"
+             {% if table is defined and table == key %}aria-current="page"{% endif %}>{{ spec.label }}</a></li>
+      {% endfor %}
+    </ul>
+
+    <p class="side-label">Estructura</p>
+    <ul>
+      <li><a href="{{ url_for('admin_sections') }}"
+             {% if request.endpoint == 'admin_sections' %}aria-current="page"{% endif %}>Encabezados de sección</a></li>
+      <li><a href="{{ url_for('admin_settings') }}"
+             {% if request.endpoint == 'admin_settings' %}aria-current="page"{% endif %}>Ajustes generales</a></li>
+      <li><a href="{{ url_for('admin_password') }}"
+             {% if request.endpoint == 'admin_password' %}aria-current="page"{% endif %}>Mi contraseña</a></li>
+    </ul>
+
+    <p class="side-label">Acceso</p>
+    <ul>
+      <li><a href="{{ url_for('admin_users') }}"
+             {% if request.endpoint and request.endpoint.startswith('admin_user') %}aria-current="page"{% endif %}>Usuarios</a></li>
+    </ul>
+  </nav>
+
+  <div class="side-foot">
+    {% if current_user %}
+    <p class="side-user">{{ current_user.name or current_user.username }}<br>
+      <span>{{ current_user.username }}</span></p>
+    {% endif %}
+    <a class="side-view" href="{{ url_for('index') }}" target="_blank" rel="noopener">Ver el sitio ↗</a>
+    <form method="post" action="{{ url_for('admin_logout') }}">
+      <button class="side-out" type="submit">Cerrar sesión</button>
+    </form>
+  </div>
+</aside>
+
+<main class="main">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flashes">
+      {% for category, message in messages %}
+      <p class="flash flash--{{ category }}">{{ message }}</p>
+      {% endfor %}
+    </div>
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</main>
+
+</body>
+</html>

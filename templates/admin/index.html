@@ -1,0 +1,30 @@
+{% extends "admin/base.html" %}
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<header class="page-head">
+  <div>
+    <h1>Gestor de contenidos</h1>
+    <p class="page-help">Todo lo que se ve en la portada se edita desde aquí. Los cambios se publican al guardar.</p>
+  </div>
+  <a class="btn btn--ghost" href="{{ url_for('index') }}" target="_blank" rel="noopener">Ver el sitio ↗</a>
+</header>
+
+<div class="tiles">
+  {% for item in resumen %}
+  <a class="tile" href="{{ url_for('admin_list', table=item.table) }}">
+    <span class="tile-num">{{ item.total }}</span>
+    <span class="tile-label">{{ item.label }}</span>
+  </a>
+  {% endfor %}
+</div>
+
+<div class="card note">
+  <h2>Cómo está organizado</h2>
+  <ul>
+    <li><strong>Contenido</strong> — los registros que se repiten: diapositivas, áreas, voces, contadores, proyectos, noticias, eventos, documentos y enlaces del pie. Cada uno se puede ordenar, ocultar sin borrarlo y eliminar.</li>
+    <li><strong>Encabezados de sección</strong> — el antetítulo, el título y la bajada que preceden a cada bloque de la portada.</li>
+    <li><strong>Ajustes generales</strong> — nombre de la organización, textos de cabecera y pie, datos de contacto y aviso de cookies.</li>
+  </ul>
+</div>
+{% endblock %}

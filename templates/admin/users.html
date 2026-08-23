@@ -1,0 +1,42 @@
+{% extends "admin/base.html" %}
+{% block title %}Usuarios{% endblock %}
+
+{% block content %}
+<header class="page-head">
+  <div>
+    <h1>Usuarios</h1>
+    <p class="page-help">Quién puede entrar al panel. Las contraseñas se guardan cifradas.</p>
+  </div>
+  <a class="btn" href="{{ url_for('admin_user_create') }}">Añadir usuario</a>
+</header>
+
+<div class="table-wrap">
+<table class="grid">
+  <thead>
+    <tr><th>Usuario</th><th>Nombre</th><th>Rol</th><th>Estado</th><th class="col-actions">Acciones</th></tr>
+  </thead>
+  <tbody>
+    {% for u in users %}
+    <tr {% if not u.active %}class="is-hidden"{% endif %}>
+      <td>
+        <strong>{{ u.username }}</strong>
+        {% if current_user and u.id == current_user.id %}<span class="tag">tú</span>{% endif %}
+      </td>
+      <td>{{ u.name }}</td>
+      <td>{{ roles.get(u.role, u.role) }}</td>
+      <td><span class="pill {{ 'pill--on' if u.active else 'pill--off' }}">{{ 'Activo' if u.active else 'Desactivado' }}</span></td>
+      <td class="col-actions">
+        <a class="link" href="{{ url_for('admin_user_edit', user_id=u.id) }}">Editar</a>
+        {% if not current_user or u.id != current_user.id %}
+        <form method="post" action="{{ url_for('admin_user_delete', user_id=u.id) }}"
+              onsubmit="return confirm('¿Eliminar a {{ u.username }}? No se puede deshacer.');">
+          <button class="link link--danger" type="submit">Eliminar</button>
+        </form>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

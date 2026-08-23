@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% from "_macros.html" import banner, encabezado, tarjeta_area with context %}
+{% block title %}{{ sections.areas.title }} · {{ settings.site_title }}{% endblock %}
+
+{% block content %}
+{{ banner('areas') }}
+
+<section class="band">
+  <div class="wrap">
+    <div class="areas">
+      {% for area in areas %}{{ tarjeta_area(area) }}{% endfor %}
+    </div>
+  </div>
+</section>
+
+{% if counters %}
+<section class="band band--cream">
+  <div class="wrap">
+    {{ encabezado('counters') }}
+    <div class="counters">
+      {% for contador in counters %}
+      <div class="counter">
+        <p class="num">{{ contador.number }}</p>
+        <p class="label">{{ contador.label }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

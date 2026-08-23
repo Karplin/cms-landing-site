@@ -1,0 +1,28 @@
+{% extends "admin/base.html" %}
+{% from "admin/_fields.html" import field %}
+{% block title %}Encabezados de sección{% endblock %}
+
+{% block content %}
+<header class="page-head">
+  <div>
+    <h1>Encabezados de sección</h1>
+    <p class="page-help">El antetítulo, el título y la bajada que abren cada bloque de la portada.</p>
+  </div>
+</header>
+
+<form method="post">
+  {% for key, label in section_keys %}
+  {% set values = sections.get(key, {}) %}
+  <fieldset class="card group">
+    <legend>{{ label }}</legend>
+    {% for f in section_fields %}
+      {{ field(f, values.get(f.name), prefix=key ~ '__') }}
+    {% endfor %}
+  </fieldset>
+  {% endfor %}
+
+  <div class="form-actions form-actions--sticky">
+    <button class="btn" type="submit">Guardar encabezados</button>
+  </div>
+</form>
+{% endblock %}

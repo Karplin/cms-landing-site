@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% from "_macros.html" import banner, tarjeta_voz with context %}
+{% block title %}{{ sections.voices.title }} · {{ settings.site_title }}{% endblock %}
+
+{% block content %}
+{{ banner('voices') }}
+
+<section class="band">
+  <div class="wrap">
+    {% if voices %}
+    <div class="voices voices--grid">
+      {% for voz in voices %}{{ tarjeta_voz(voz) }}{% endfor %}
+    </div>
+    {% else %}
+    <p class="empty-note">Todavía no hay noticias de las sedes.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

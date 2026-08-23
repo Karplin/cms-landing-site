@@ -1,0 +1,30 @@
+{% extends "admin/base.html" %}
+{% from "admin/_fields.html" import field %}
+{% block title %}{{ spec.singular|capitalize }}{% endblock %}
+
+{% block content %}
+<header class="page-head">
+  <div>
+    <p class="crumb"><a href="{{ url_for('admin_list', table=table) }}">{{ spec.label }}</a></p>
+    <h1>{{ 'Nueva ' ~ spec.singular if is_new else 'Editar ' ~ spec.singular }}</h1>
+  </div>
+</header>
+
+<form class="card form" method="post">
+  {% for f in spec.fields %}
+    {{ field(f, row.get(f.name)) }}
+  {% endfor %}
+
+  <div class="field field--check">
+    <label class="check">
+      <input type="checkbox" name="published" value="1" {% if row.get('published') %}checked{% endif %}>
+      <span>Visible en la portada</span>
+    </label>
+  </div>
+
+  <div class="form-actions">
+    <button class="btn" type="submit">Guardar</button>
+    <a class="btn btn--ghost" href="{{ url_for('admin_list', table=table) }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}
