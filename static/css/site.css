@@ -2,45 +2,51 @@
    TOKENS
    ============================================================ */
 :root{
+  /* Colores del logo de las OMP: los de la bandera dominicana y el dorado de la cruz */
+  --omp-oro:#FAC73F;
+  --omp-azul:#10417C;
+  --omp-rojo:#BF1A23;
+  --omp-verde:#3D8A47;
+
   --bg-page:#FFFFFF;
-  --bg-band:#FBF3E5;          /* franja crema */
-  --bg-band-alt:#F5F4F1;      /* franja gris claro */
+  --bg-band:#F3F6FB;          /* franja suave, del azul del logo */
+  --bg-band-alt:#ECF1F8;
   --surface:#FFFFFF;
-  --surface-soft:#FFF9EE;
+  --surface-soft:#F8FAFD;
 
-  --text:#1B2A2F;
-  --text-soft:#54666C;
-  --text-faint:#8A9AA0;
+  --text:#13223F;
+  --text-soft:#4A5672;
+  --text-faint:#8590A6;
 
-  --accent:#B07C22;           /* dorado institucional */
-  --accent-ink:#8A5F14;
-  --accent-2:#2E545F;         /* verde azulado */
-  --btn-text:#1B1206;
-  --btn-text-hover:#FFF6E4;
+  --accent:var(--omp-oro);    /* botones, filetes y subrayados */
+  --accent-ink:var(--omp-rojo); /* antetítulos, fechas y enlaces: texto sobre blanco */
+  --accent-2:var(--omp-azul); /* iconos */
+  --btn-text:#0E2244;
+  --btn-text-hover:#FFFFFF;
 
-  --hero-a:#7E1730;
-  --hero-b:#A8324C;
-  --hero-c:#4A0E1E;
+  --hero-a:#10417C;
+  --hero-b:#1D5BA6;
+  --hero-c:#0A2A55;
   --hero-text:#FFFFFF;
-  --hero-soft:rgba(255,255,255,.62);
-  --hero-faint:rgba(255,255,255,.58);
+  --hero-soft:rgba(255,255,255,.72);
+  --hero-faint:rgba(255,255,255,.6);
   --hero-dot:rgba(255,255,255,.16);
-  --hero-ui:rgba(255,255,255,.4);
+  --hero-ui:rgba(255,255,255,.42);
 
-  --panel:#2E545F;            /* pre-footer */
-  --panel-text:#E7EEEF;
-  --panel-soft:#A7BEC3;
+  --panel:#0D2B57;            /* pie de página */
+  --panel-text:#E8EDF7;
+  --panel-soft:#A9B8D6;
   --panel-strong:#FFFFFF;
-  --panel-line:rgba(231,238,239,.18);
+  --panel-line:rgba(232,237,247,.16);
 
-  --line:rgba(27,42,47,.14);
-  --line-strong:rgba(27,42,47,.28);
-  --shadow:0 1px 2px rgba(27,42,47,.06), 0 8px 24px rgba(27,42,47,.07);
+  --line:rgba(19,34,63,.13);
+  --line-strong:rgba(19,34,63,.26);
+  --shadow:0 1px 2px rgba(13,43,87,.06), 0 8px 24px rgba(13,43,87,.08);
 
-  --tone-a:#2E545F; --tone-a2:#16333B;
-  --tone-b:#8E5A2A; --tone-b2:#4A2C10;
-  --tone-c:#3F6B57; --tone-c2:#17342A;
-  --tone-d:#6B3350; --tone-d2:#331526;
+  --tone-a:#10417C; --tone-a2:#0A2A55;
+  --tone-b:#BF1A23; --tone-b2:#7A0F16;
+  --tone-c:#3D8A47; --tone-c2:#21562A;
+  --tone-d:#D9A520; --tone-d2:#8A6410;
 
   --max:1180px;
 }
@@ -48,45 +54,42 @@
 /* El modo normal es el de arriba. El oscuro se activa con el conmutador
    de la cabecera, que marca data-theme="dark" en <html>. */
 :root[data-theme="dark"]{
-  --bg-page:#0F1618;
-  --bg-band:#17211F;
-  --bg-band-alt:#131A1C;
-  --surface:#182123;
-  --surface-soft:#1D2729;
+  --bg-page:#0A1424;
+  --bg-band:#0F1C33;
+  --bg-band-alt:#0D182C;
+  --surface:#13233F;
+  --surface-soft:#172A4A;
 
-  --text:#EBE5D9;
-  --text-soft:#AEBDC0;
-  --text-faint:#7E8F93;
+  --text:#E9EDF5;
+  --text-soft:#A9B4CA;
+  --text-faint:#7A869E;
 
-  --accent:#D9A548;
-  --accent-ink:#E7BC6C;
-  --accent-2:#8CBAC4;
-  --btn-text:#1B1206;
-  --btn-text-hover:#1B1206;
+  --accent:var(--omp-oro);
+  --accent-ink:#FF8F95;       /* el rojo del logo, aclarado para leerse sobre azul noche */
+  --accent-2:#7FA6E0;
+  --btn-text:#0E2244;
+  --btn-text-hover:#0E2244;
 
-  --hero-a:#6B1129;
-  --hero-b:#8E2740;
-  --hero-c:#2C0710;
-  --hero-text:#FFFFFF;
-  --hero-soft:rgba(255,255,255,.62);
-  --hero-faint:rgba(255,255,255,.58);
-  --hero-dot:rgba(255,255,255,.16);
-  --hero-ui:rgba(255,255,255,.4);
+  --hero-a:#0D3668;
+  --hero-b:#184E94;
+  --hero-c:#061B3B;
 
-  --panel:#12292F;
-  --panel-text:#E2ECEE;
-  --panel-soft:#9FB8BD;
-  --panel-strong:#FFFFFF;
-  --panel-line:rgba(226,236,238,.16);
+  --panel:#071830;
+  --panel-text:#E2E8F4;
+  --panel-soft:#9DADCB;
+  --panel-line:rgba(226,232,244,.14);
 
-  --line:rgba(235,229,217,.16);
-  --line-strong:rgba(235,229,217,.32);
+  --line:rgba(233,237,245,.14);
+  --line-strong:rgba(233,237,245,.28);
   --shadow:0 1px 2px rgba(0,0,0,.5), 0 8px 28px rgba(0,0,0,.45);
+}
 
-  --tone-a:#2E545F; --tone-a2:#16333B;
-  --tone-b:#8E5A2A; --tone-b2:#4A2C10;
-  --tone-c:#3F6B57; --tone-c2:#17342A;
-  --tone-d:#6B3350; --tone-d2:#331526;
+/* Franja con los colores del logo, en lo alto de todas las páginas */
+.site-header::before{
+  content:"";display:block;height:4px;
+  background:linear-gradient(90deg,
+    var(--omp-oro) 0 25%, var(--omp-azul) 25% 50%,
+    var(--omp-rojo) 50% 75%, var(--omp-verde) 75% 100%);
 }
 
 /* ============================================================
@@ -394,7 +397,7 @@ p{margin:0;}
   font:inherit;font-size:14px;color:var(--text);min-width:0;
 }
 .finder-field input:focus{outline:none;}
-.finder-field:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(176,124,34,.15);}
+.finder-field:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(250,199,63,.3);}
 
 /* Rejilla de tarjetas */
 .mondo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:26px 24px;}
