@@ -43,7 +43,13 @@ CONTENT_TYPES = {
                          ("liderazgo", "Liderazgo")],
              "default": "educacion"},
             {"name": "title", "label": "Título", "type": "text", "required": True},
-            {"name": "body", "label": "Descripción", "type": "textarea", "rows": 3},
+            {"name": "summary", "label": "Resumen para la tarjeta", "type": "textarea", "rows": 2,
+             "help": "Una o dos frases. Es lo que se ve en la tarjeta; el texto completo va en su página."},
+            {"name": "body", "label": "Texto completo", "type": "textarea", "rows": 14,
+             "help": "Se muestra en la página propia del área. Una línea corta sin punto final "
+                     "(por ejemplo «Historia» o «Misión») se convierte en subtítulo."},
+            {"name": "photo", "label": "Imagen", "type": "image",
+             "help": "Opcional. Sustituye al icono en la tarjeta."},
             {"name": "link_label", "label": "Texto del enlace", "type": "text", "default": "Conocer el área"},
             {"name": "link_href", "label": "Enlace", "type": "text", "default": "#proyectos"},
         ],
@@ -128,6 +134,20 @@ CONTENT_TYPES = {
             {"name": "href", "label": "Enlace al archivo", "type": "text", "default": "#"},
         ],
     },
+    "founders": {
+        "label": "Fundadores",
+        "singular": "fundador",
+        "help": "Los rostros detrás de cada Obra. Salen en la página de la campaña.",
+        "list_columns": ["name", "work", "years"],
+        "fields": [
+            {"name": "photo", "label": "Retrato", "type": "image"},
+            {"name": "name", "label": "Nombre", "type": "text", "required": True},
+            {"name": "years", "label": "Años", "type": "text", "help": "Por ejemplo: 1799-1862"},
+            {"name": "work", "label": "Obra que fundó", "type": "text", "required": True},
+            {"name": "work_year", "label": "Año de fundación", "type": "text"},
+            {"name": "note", "label": "Nota breve", "type": "textarea", "rows": 2},
+        ],
+    },
     "footer_links": {
         "label": "Enlaces del pie",
         "singular": "enlace",
@@ -168,6 +188,9 @@ SECTION_KEYS = [
     ("projects", "Proyectos"),
     ("news", "Noticias y eventos"),
     ("documents", "Documentación"),
+    ("campaign", "Campaña (DOMUND)"),
+    ("founders", "Fundadores"),
+    ("structure", "Estructura de las Obras"),
 ]
 
 SECTION_FIELDS = [
@@ -217,7 +240,19 @@ SETTINGS_GROUPS = [
         ],
     },
     {
-        "label": "Pie de pagina",
+        "label": "Campaña (DOMUND)",
+        "fields": [
+            {"name": "campaign_poster", "label": "Afiche", "type": "image"},
+            {"name": "campaign_motto", "label": "Lema", "type": "text"},
+            {"name": "campaign_date", "label": "Fecha de la jornada", "type": "text"},
+            {"name": "campaign_call", "label": "Llamada final", "type": "text"},
+            {"name": "campaign_cta_label", "label": "Texto del botón", "type": "text"},
+            {"name": "campaign_cta_href", "label": "Enlace del botón", "type": "text",
+             "help": "Por ejemplo, el folleto en PDF."},
+        ],
+    },
+    {
+        "label": "Pie de página",
         "fields": [
             {"name": "footer_col_institucion", "label": "Título columna 1", "type": "text"},
             {"name": "footer_col_programas", "label": "Título columna 2", "type": "text"},

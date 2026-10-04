@@ -5,6 +5,13 @@
 {% block content %}
 {{ banner('areas') }}
 
+{% set resto = sections.areas.subtitle|resto_parrafos %}
+{% if resto %}
+<section class="band band--tight-top">
+  <div class="wrap prose">{{ resto|parrafos }}</div>
+</section>
+{% endif %}
+
 <section class="band">
   <div class="wrap">
     <div class="areas">

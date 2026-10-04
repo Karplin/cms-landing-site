@@ -16,6 +16,19 @@
       {% endfor %}
     </select>
 
+  {% elif spec.type == 'image' %}
+    {% if value %}
+    <div class="image-current">
+      <img src="{{ value }}" alt="">
+      <label class="check">
+        <input type="checkbox" name="{{ name }}__borrar" value="1">
+        <span>Quitar esta imagen</span>
+      </label>
+    </div>
+    {% endif %}
+    <input id="{{ name }}" name="{{ name }}" type="file"
+           accept=".jpg,.jpeg,.png,.webp,.gif,.svg">
+
   {% elif spec.type == 'number' %}
     <input id="{{ name }}" name="{{ name }}" type="number" value="{{ value if value is not none else '' }}"
            {% if spec.required %}required{% endif %}>

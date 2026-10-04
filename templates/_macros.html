@@ -39,7 +39,7 @@
   {% if s.eyebrow %}<p class="eyebrow">{{ s.eyebrow }}</p>{% endif %}
   <h2>{{ s.title }}</h2>
   <span class="rule" aria-hidden="true"></span>
-  {% if s.subtitle %}<p class="sub">{{ s.subtitle }}</p>{% endif %}
+  {% if s.subtitle %}<p class="sub">{{ s.subtitle|primer_parrafo }}</p>{% endif %}
 </div>
 {%- endmacro %}
 
@@ -50,18 +50,24 @@
   <div class="wrap">
     {% if s.eyebrow %}<p class="eyebrow">{{ s.eyebrow }}</p>{% endif %}
     <h1>{{ s.title }}</h1>
-    {% if s.subtitle %}<p class="lead">{{ s.subtitle }}</p>{% endif %}
+    {% if s.subtitle %}<p class="lead">{{ s.subtitle|primer_parrafo }}</p>{% endif %}
   </div>
 </section>
 {%- endmacro %}
 
 {% macro tarjeta_area(area) -%}
-<article class="area">
+<article class="area {{ 'area--foto' if area.photo }}">
+  {% if area.photo %}
+  <img class="area-photo" src="{{ area.photo }}" alt="{{ area.title }}">
+  {% else %}
   {{ icono_area(area.icon) }}
+  {% endif %}
   <h3>{{ area.title }}</h3>
-  <p>{{ area.body }}</p>
+  <p>{{ area.summary or (area.body|primer_parrafo|truncate(180, True, '…')) }}</p>
   {% if area.link_label %}
-  <a class="link-more" href="{{ area.link_href or '#' }}">{{ area.link_label }}</a>
+  {% set destino = area.link_href if area.link_href and area.link_href not in ['#', '/programas']
+                   else url_for('area_detalle', item_id=area.id) %}
+  <a class="link-more" href="{{ destino }}">{{ area.link_label }}</a>
   {% endif %}
 </article>
 {%- endmacro %}

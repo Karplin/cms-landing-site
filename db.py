@@ -145,9 +145,34 @@ def init_db():
         _soltar_candado()
 
 
+def _columnas_existentes(tabla):
+    if USING_POSTGRES:
+        filas = consultar(
+            "SELECT column_name AS c FROM information_schema.columns "
+            "WHERE table_schema = 'public' AND table_name = ?", (tabla,))
+        return {f["c"] for f in filas}
+    return {f["name"] for f in consultar("PRAGMA table_info(%s)" % tabla)}
+
+
+def _migrar_columnas(tabla, fields):
+    """Añade las columnas que el esquema define y la tabla aún no tiene.
+
+    CREATE TABLE IF NOT EXISTS no altera tablas existentes: sin esto, un campo
+    nuevo en schema.py rompería el guardado en una base ya creada.
+    """
+    existentes = _columnas_existentes(tabla)
+    for campo in fields:
+        if campo["name"] not in existentes:
+            tipo = _SQL_TYPES.get(campo["type"], "TEXT")
+            ejecutar("ALTER TABLE {} ADD COLUMN {} {} NOT NULL DEFAULT ''".format(
+                tabla, campo["name"], tipo), commit=False)
+            print("Migración: %s.%s añadida" % (tabla, campo["name"]))
+
+
 def _crear_y_sembrar():
     for tabla, spec in CONTENT_TYPES.items():
         ejecutar(_create_sql(tabla, spec["fields"]), commit=False)
+        _migrar_columnas(tabla, spec["fields"])
 
     ejecutar(
         "CREATE TABLE IF NOT EXISTS sections ("

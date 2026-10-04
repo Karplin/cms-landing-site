@@ -144,6 +144,29 @@ subtítulo a los proyectos:
 
 El formulario, el listado y la columna de la tabla aparecen solos.
 
+## Trabajar en local con el contenido de producción
+
+El flujo es: bajar lo que hay en producción, ajustar en local y subir.
+
+```bash
+.venv/bin/python scripts/sincronizar.py bajar
+```
+
+```bash
+.venv/bin/python scripts/sincronizar.py subir --si
+```
+
+Necesita `PROD_DATABASE_URL` en el `.env` local (nunca se sube a git).
+
+- **bajar** solo lee de producción. Antes guarda una copia de la base local en `backups/`.
+- **subir** sobrescribe el contenido de producción con el local. Antes guarda una copia
+  de producción en `backups/`, migra el esquema y lo hace todo en una transacción.
+- Ninguno de los dos copia usuarios: cada entorno conserva sus accesos.
+- Si alguien está editando en producción, baja primero o perderás sus cambios.
+
+Las columnas nuevas de `schema.py` se añaden solas al arrancar la app, en local y en
+producción, sin borrar datos.
+
 ## Publicarlo en internet gratis
 
 La combinación que mejor funciona sin pagar: **Neon** para la base de datos y

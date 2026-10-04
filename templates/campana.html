@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado with context %}
+{% block title %}{{ sections.campaign.title }} · {{ settings.site_title }}{% endblock %}
+
+{% block content %}
+{% set c = sections.campaign %}
+
+{# ============ Portada de la campaña: afiche + titular ============ #}
+<section class="campaign-hero">
+  <div class="wrap campaign-hero-grid">
+    <div class="campaign-intro">
+      {% if c.eyebrow %}<p class="eyebrow">{{ c.eyebrow }}</p>{% endif %}
+      <h1>{{ c.title }}</h1>
+      {% if settings.campaign_motto %}
+      <p class="campaign-motto">«{{ settings.campaign_motto }}»</p>
+      {% endif %}
+      {% if settings.campaign_date %}
+      <p class="campaign-date">{{ settings.campaign_date }}</p>
+      {% endif %}
+      {% if settings.campaign_cta_label %}
+      <p><a class="btn" href="{{ settings.campaign_cta_href or '#' }}">{{ settings.campaign_cta_label }}
+        <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M7.2 0v9.1L4.5 6.4 3.3 7.6 8 12.3l4.7-4.7-1.2-1.2-2.7 2.7V0H7.2ZM1 14v2h14v-2H1Z"/></svg>
+      </a></p>
+      {% endif %}
+    </div>
+
+    {% if settings.campaign_poster %}
+    <figure class="campaign-poster">
+      <a href="{{ settings.campaign_poster }}" target="_blank" rel="noopener">
+        <img src="{{ settings.campaign_poster }}" alt="Afiche de la campaña">
+      </a>
+    </figure>
+    {% endif %}
+  </div>
+</section>
+
+{# ============ Qué es el DOMUND ============ #}
+{% if c.subtitle %}
+<section class="band">
+  <div class="wrap detail-body">
+    <p>{{ c.subtitle }}</p>
+  </div>
+</section>
+{% endif %}
+
+{# ============ Cifras de la jornada ============ #}
+{% if campaign_facts %}
+<section class="band band--cream band--tight">
+  <div class="wrap">
+    <div class="counters">
+      {% for cifra in campaign_facts %}
+      <div class="counter">
+        <p class="num">{{ cifra.number }}</p>
+        <p class="label">{{ cifra.label }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ============ Fundadores, con sus retratos ============ #}
+{% if founders %}
+<section class="band band--alt" id="fundadores">
+  <div class="wrap">
+    {{ encabezado('founders') }}
+    <div class="founders">
+      {% for f in founders %}
+      <article class="founder">
+        {% if f.photo %}
+        <img class="founder-photo" src="{{ f.photo }}" alt="{{ f.name }}">
+        {% else %}
+        <span class="founder-photo founder-photo--empty" aria-hidden="true"></span>
+        {% endif %}
+        <h3>{{ f.name }}</h3>
+        {% if f.years %}<p class="founder-years">{{ f.years }}</p>{% endif %}
+        <p class="founder-work">{{ f.work }}{% if f.work_year %} · {{ f.work_year }}{% endif %}</p>
+        {% if f.note %}<p class="founder-note">{{ f.note }}</p>{% endif %}
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ============ Estructura de las Obras ============ #}
+<section class="band" id="estructura">
+  <div class="wrap">
+    {{ encabezado('structure') }}
+    <ol class="chain">
+      {% for paso in structure_steps %}
+      <li>
+        <h3>{{ paso.title }}</h3>
+        <p>{{ paso.body }}</p>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+
+{# ============ Llamada final ============ #}
+{% if settings.campaign_call %}
+<section class="campaign-call">
+  <div class="wrap">
+    <p>{{ settings.campaign_call }}</p>
+    {% if settings.campaign_date %}<p class="campaign-call-date">{{ settings.campaign_date }}</p>{% endif %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

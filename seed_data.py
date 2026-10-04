@@ -17,6 +17,12 @@ SEED = {
         "docs_col1_link": "Leer todos",
         "docs_col2_title": "Memorias anuales",
         "docs_col2_link": "Ver el archivo",
+        "campaign_poster": "/static/uploads/afiche-domund-2026.jpg",
+        "campaign_motto": "Sinodalidad, unidos en el Espíritu para anunciar el Evangelio",
+        "campaign_date": "Domingo 18 de octubre de 2026",
+        "campaign_call": "Oración, sacrificio y ofrenda.",
+        "campaign_cta_label": "Descargar el folleto",
+        "campaign_cta_href": "/static/uploads/brochure-domund.pdf",
         "footer_col_institucion": "Institución",
         "footer_col_programas": "Programas",
         "footer_col_contacto": "Contacto",
@@ -64,6 +70,26 @@ SEED = {
             "eyebrow": "Documentación",
             "title": "Boletines y memorias",
             "subtitle": "",
+        },
+        "campaign": {
+            "eyebrow": "Domingo Mundial de las Misiones",
+            "title": "DOMUND: cien años de una jornada que une al mundo",
+            "subtitle": "En 1926 el Papa Pío XI, el Papa de las Misiones, instituyó la Jornada "
+                        "Misionera Mundial a petición de la Obra de la Propagación de la Fe. "
+                        "La idea era simple: que un domingo de octubre toda la Iglesia del mundo "
+                        "rece y dé limosna por las misiones.",
+        },
+        "founders": {
+            "eyebrow": "Fundadores de la OMP",
+            "title": "Cuatro personas, cuatro Obras",
+            "subtitle": "Cada una de las Obras Misionales Pontificias nació del impulso de "
+                        "alguien concreto.",
+        },
+        "structure": {
+            "eyebrow": "Cómo funciona",
+            "title": "Estructura de las Obras",
+            "subtitle": "Todo lo que se recoge en octubre llega a Roma y desde Roma se reparte "
+                        "a las 1.100 diócesis más pobres del planeta.",
         },
     },
 
@@ -274,6 +300,43 @@ SEED = {
             "doc_group": "memoria", "title": "Estatuto institucional",
             "meta": "Texto vigente, revisión de 2023",
             "size_label": "Descargar (1,4 MB)", "href": "#",
+        },
+    ],
+
+    "founders": [
+        {
+            "photo": "/static/uploads/jaricot.jpg",
+            "name": "Beata Paulina María Jaricot",
+            "years": "1799-1862",
+            "work": "Propagación de la Fe",
+            "work_year": "1822",
+            "note": "Sostiene las misiones con la oración y la colecta del DOMUND.",
+        },
+        {
+            "photo": "/static/uploads/forbin-janson.jpg",
+            "name": "Mons. Charles-Auguste de Forbin-Janson",
+            "years": "1765-1844",
+            "work": "Santa Infancia",
+            "work_year": "1843",
+            "note": "Niños que rezan y ayudan a otros niños: Infancia y Adolescencia Misionera.",
+        },
+        {
+            "photo": "/static/uploads/bigard.jpg",
+            "name": "Jeanne Bigard",
+            "years": "1859-1934",
+            "work": "San Pedro Apóstol",
+            "work_year": "1889",
+            "note": "Formación de seminaristas y novicias en tierras de misión. "
+                    "Sostiene los seminarios de África, Asia y Oceanía.",
+        },
+        {
+            "photo": "/static/uploads/manna.jpg",
+            "name": "Beato Paolo Manna",
+            "years": "1785-1844",
+            "work": "Pontificia Unión Misional",
+            "work_year": "1916",
+            "note": "El alma de las otras tres Obras. No recoge dinero: forma el corazón "
+                    "misionero de sacerdotes, religiosos y laicos.",
         },
     ],
 

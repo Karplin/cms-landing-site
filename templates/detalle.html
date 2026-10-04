@@ -17,10 +17,13 @@
 
 <section class="band">
   <div class="wrap detail-body">
-    {% if fila.summary is defined and fila.summary %}
+    {% if fila.body is defined and fila.body %}
+      {% if fila.photo is defined and fila.photo %}
+      <img class="detail-photo" src="{{ fila.photo }}" alt="{{ fila.title }}">
+      {% endif %}
+      <div class="prose">{{ fila.body|parrafos }}</div>
+    {% elif fila.summary is defined and fila.summary %}
       <p>{{ fila.summary }}</p>
-    {% elif fila.body is defined and fila.body %}
-      <p>{{ fila.body }}</p>
     {% endif %}
     {% if fila.place is defined and fila.place and fila.area_label is defined %}
       <p class="detail-meta">{{ fila.area_label }} · {{ fila.place }}</p>

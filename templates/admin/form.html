@@ -10,7 +10,7 @@
   </div>
 </header>
 
-<form class="card form" method="post">
+<form class="card form" method="post" enctype="multipart/form-data">
   {% for f in spec.fields %}
     {{ field(f, row.get(f.name)) }}
   {% endfor %}

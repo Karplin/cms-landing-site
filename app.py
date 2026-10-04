@@ -6,11 +6,13 @@ Arranque:  python app.py   ->  http://127.0.0.1:5000
 """
 
 import os
+import re
 import secrets
 from functools import wraps
 
 from flask import (Flask, abort, flash, redirect, render_template, request,
                    session, url_for)
+from werkzeug.utils import secure_filename
 from markupsafe import Markup, escape
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -21,6 +23,7 @@ from schema import (CONTENT_TYPES, SECTION_FIELDS, SECTION_KEYS,
 # Menú principal. Un elemento con "children" despliega un submenú;
 # "endpoint" en None hace que el rótulo no sea un enlace (solo abre el submenú).
 NAV = [
+    {"endpoint": "campana", "label": "DOMUND", "children": None},
     {"endpoint": "quienes_somos", "label": "Quiénes somos", "children": "areas"},
     {"endpoint": "programas", "label": "Programas", "children": None},
     {"endpoint": None, "label": "Noticias y eventos",
@@ -77,6 +80,43 @@ def nl2br(value):
     return Markup("<br>".join(parts))
 
 
+def _bloques(texto):
+    """Parte un texto en párrafos, aceptando saltos simples o dobles y \r\n."""
+    if not texto:
+        return []
+    texto = texto.replace("\r\n", "\n").replace("\r", "\n")
+    return [b.strip() for b in texto.split("\n") if b.strip()]
+
+
+def _es_subtitulo(linea):
+    return len(linea) <= 30 and not linea.endswith((".", ":", "?", "!", "»", "”", '"'))
+
+
+@app.template_filter("parrafos")
+def parrafos(texto):
+    """Texto plano a HTML: líneas cortas sin punto final pasan a subtítulo."""
+    html = []
+    for bloque in _bloques(texto):
+        if _es_subtitulo(bloque):
+            html.append(Markup("<h2>%s</h2>") % bloque.capitalize())
+        elif bloque.startswith(("“", '"', "«")):
+            html.append(Markup('<blockquote>%s</blockquote>') % bloque)
+        else:
+            html.append(Markup("<p>%s</p>") % bloque)
+    return Markup("\n").join(html)
+
+
+@app.template_filter("primer_parrafo")
+def primer_parrafo(texto):
+    bloques = _bloques(texto)
+    return bloques[0] if bloques else ""
+
+
+@app.template_filter("resto_parrafos")
+def resto_parrafos(texto):
+    return "\n".join(_bloques(texto)[1:])
+
+
 @app.context_processor
 def inject_nav():
     """El menú lateral del panel se construye desde el esquema."""
@@ -112,6 +152,53 @@ def inject_site():
         },
         "legal_links": db.list_rows("legal_links", only_published=True),
     }
+
+
+UPLOAD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "uploads")
+EXTENSIONES = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg", ".pdf"}
+MAX_SUBIDA = 8 * 1024 * 1024          # 8 MB por archivo
+app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
+
+
+def guardar_archivo(archivo):
+    """Guarda una subida y devuelve su ruta pública, o None si no sirve."""
+    if not archivo or not archivo.filename:
+        return None
+
+    nombre = secure_filename(archivo.filename)
+    base, extension = os.path.splitext(nombre)
+    extension = extension.lower()
+    if extension not in EXTENSIONES:
+        raise ValueError("Formato no admitido: usa JPG, PNG, WEBP, GIF, SVG o PDF.")
+
+    base = re.sub(r"[^a-z0-9-]+", "-", base.lower()).strip("-") or "archivo"
+    os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+    destino = "%s%s" % (base, extension)
+    contador = 2
+    while os.path.exists(os.path.join(UPLOAD_DIR, destino)):
+        destino = "%s-%d%s" % (base, contador, extension)
+        contador += 1
+
+    archivo.save(os.path.join(UPLOAD_DIR, destino))
+    return url_for("static", filename="uploads/%s" % destino)
+
+
+def collect_con_archivos(fields, form, files, fila_actual=None):
+    """Como collect, pero los campos de imagen conservan o reemplazan el archivo."""
+    valores = collect(fields, form)
+    for campo in fields:
+        if campo["type"] != "image":
+            continue
+        nombre = campo["name"]
+        subido = guardar_archivo(files.get(nombre))
+        if subido:
+            valores[nombre] = subido
+        elif form.get(nombre + "__borrar"):
+            valores[nombre] = ""
+        else:
+            valores[nombre] = (fila_actual or {}).get(nombre, "") or form.get(nombre, "")
+    return valores
 
 
 def collect(fields, form):
@@ -178,6 +265,40 @@ def index():
         events=db.list_rows("events", only_published=True),
         bulletins=[fila for fila in documentos if fila["doc_group"] == "boletin"],
         reports=[fila for fila in documentos if fila["doc_group"] == "memoria"],
+    )
+
+
+# Los pasos del recorrido del dinero y la cadena de gobierno salen del folleto.
+PASOS_ESTRUCTURA = [
+    {"title": "Secretariado Internacional, en Roma",
+     "body": "Las cuatro Obras tienen su gobierno central en el Secretariado Internacional "
+             "de las OMP, en Via di Propaganda 1. Depende del Dicasterio para la "
+             "Evangelización y desde ahí se administra el Fondo Universal de Solidaridad."},
+    {"title": "La colecta viaja íntegra",
+     "body": "Todo lo que se recoge el día del DOMUND en más de 140 países va completo al "
+             "Fondo Universal de Solidaridad. Es la colecta más universal de la Iglesia."},
+    {"title": "Asamblea General, cada mayo",
+     "body": "Los Directores Nacionales de todo el mundo se reúnen en Roma y presentan los "
+             "proyectos de las cuatro Obras."},
+    {"title": "Se reparte según necesidad",
+     "body": "Los fondos se asignan según la necesidad de cada territorio, no según quién "
+             "aportó más. Así llegan a las 1.100 diócesis más pobres del planeta."},
+]
+
+CIFRAS_CAMPANA = [
+    {"number": "100", "label": "Años de DOMUND desde 1926"},
+    {"number": "140+", "label": "Países donde se celebra la jornada"},
+    {"number": "1.100", "label": "Diócesis sostenidas con la colecta"},
+]
+
+
+@app.route("/domund")
+def campana():
+    return render_template(
+        "campana.html",
+        founders=db.list_rows("founders", only_published=True),
+        structure_steps=PASOS_ESTRUCTURA,
+        campaign_facts=CIFRAS_CAMPANA,
     )
 
 
@@ -351,8 +472,12 @@ def admin_list(table):
 def admin_create(table):
     spec = content_type_or_404(table)
     if request.method == "POST":
-        db.create(table, collect(spec["fields"], request.form),
-                  published=1 if request.form.get("published") else 0)
+        try:
+            valores = collect_con_archivos(spec["fields"], request.form, request.files)
+        except ValueError as error:
+            flash(str(error), "error")
+            return redirect(url_for("admin_create", table=table))
+        db.create(table, valores, published=1 if request.form.get("published") else 0)
         flash("Se ha creado el registro.", "ok")
         return redirect(url_for("admin_list", table=table))
 
@@ -370,7 +495,12 @@ def admin_edit(table, row_id):
         abort(404)
 
     if request.method == "POST":
-        db.update(table, row_id, collect(spec["fields"], request.form),
+        try:
+            valores = collect_con_archivos(spec["fields"], request.form, request.files, row)
+        except ValueError as error:
+            flash(str(error), "error")
+            return redirect(url_for("admin_edit", table=table, row_id=row_id))
+        db.update(table, row_id, valores,
                   published=1 if request.form.get("published") else 0)
         flash("Cambios guardados.", "ok")
         return redirect(url_for("admin_list", table=table))
