@@ -24,7 +24,7 @@
         <div class="feed-body">
           <p class="feed-date">{{ fila.day }} {{ fila.month }}</p>
           <h3><a href="{{ fila.url }}">{{ fila.title }}</a></h3>
-          {% if fila.summary %}<div class="feed-summary">{{ fila.summary|parrafos }}</div>{% endif %}
+          {% if fila.summary %}<p class="feed-summary">{{ fila.summary|extracto(260) }}</p>{% endif %}
           <a class="link-more" href="{{ fila.url }}">Leer más</a>
         </div>
       </article>

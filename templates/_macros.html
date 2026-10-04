@@ -88,10 +88,10 @@
 
 {% macro item_fecha(item, url=None) -%}
 <li class="item">
-  <div class="item-date"><p class="d">{{ item.day }}</p><p class="m">{{ item.month }}</p></div>
+  <div class="item-date"><p class="d {{ 'd--rango' if item.day|length > 2 }}">{{ item.day }}</p><p class="m">{{ item.month }}</p></div>
   <a href="{{ url or item.href or '#' }}">
     <h4>{{ item.title }}</h4>
-    {% if item.summary %}<p>{{ item.summary }}</p>{% endif %}
+    {% if item.summary %}<p>{{ item.summary|extracto(150) }}</p>{% endif %}
   </a>
 </li>
 {%- endmacro %}

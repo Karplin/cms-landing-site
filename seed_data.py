@@ -189,26 +189,7 @@ SEED = {
         },
     ],
 
-    "news": [
-        {
-            "day": "20", "month": "Ago",
-            "title": "El Instituto publica el presupuesto abierto de sus 1 284 proyectos",
-            "summary": "La base de datos puede consultarse y descargarse por territorio, área y año.",
-            "href": "#",
-        },
-        {
-            "day": "11", "month": "Ago",
-            "title": "Nueva sede territorial en el nororiente ecuatoriano",
-            "summary": "Atenderá a doce municipios que hasta ahora dependían de la oficina central.",
-            "href": "#",
-        },
-        {
-            "day": "02", "month": "Ago",
-            "title": "Convenio de formación docente con seis universidades públicas",
-            "summary": "Los cursos serán gratuitos para docentes de escuelas rurales acompañadas.",
-            "href": "#",
-        },
-    ],
+    "news": [],
 
     "events": [
         {
@@ -250,7 +231,7 @@ SEED = {
         },
         {
             "doc_group": "memoria", "title": "Estatuto de las Obras Misionales Pontificias",
-            "meta": "Borrador del 5 de mayo de 2025 · 29 páginas",
+            "meta": "Versión aprobada · 29 páginas",
             "size_label": "Descargar PDF (428 KB)", "href": "/static/uploads/estatutos-omp.pdf",
         },
     ],

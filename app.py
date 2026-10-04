@@ -79,16 +79,59 @@ def nl2br(value):
     return Markup("<br>".join(parts))
 
 
-def _bloques(texto):
-    """Parte un texto en párrafos, aceptando saltos simples o dobles y \r\n."""
-    if not texto:
-        return []
-    texto = texto.replace("\r\n", "\n").replace("\r", "\n")
-    return [b.strip() for b in texto.split("\n") if b.strip()]
+_FIN_DE_FRASE = (".", ":", "?", "!", "»", "”", '"', "’", ")", ";")
+_ENLACES = {"de", "del", "la", "el", "los", "las", "y", "e", "o", "en", "a", "al",
+            "con", "por", "para", "que", "un", "una", "su", "sus"}
 
 
 def _es_subtitulo(linea):
-    return len(linea) <= 30 and not linea.endswith((".", ":", "?", "!", "»", "”", '"'))
+    # Con letras: una fecha suelta como «11/08/2026» no es un subtítulo
+    return (len(linea) <= 30 and not linea.endswith(_FIN_DE_FRASE)
+            and any(caracter.isalpha() for caracter in linea))
+
+
+def _sigue_en_la_linea_siguiente(actual, siguiente):
+    """¿Es un corte de línea a mitad de frase, como los que deja pegar desde un PDF?"""
+    if not siguiente or _es_subtitulo(actual) or actual.endswith(_FIN_DE_FRASE):
+        return False
+    ultima = actual.rsplit(" ", 1)[-1].lower()
+    return siguiente[0].islower() or len(actual) >= 70 or ultima in _ENLACES
+
+
+def _bloques(texto):
+    """Parte un texto en párrafos.
+
+    Acepta saltos simples o dobles y \r\n, y vuelve a unir las líneas cortadas a
+    mitad de frase. Una línea en blanco siempre separa párrafos.
+    """
+    if not texto:
+        return []
+    texto = texto.replace("\r\n", "\n").replace("\r", "\n")
+    bloques = []
+    for trozo in texto.split("\n\n"):
+        lineas = [l.strip() for l in trozo.split("\n") if l.strip()]
+        actual = ""
+        for i, linea in enumerate(lineas):
+            actual = (actual + " " + linea).strip()
+            siguiente = lineas[i + 1] if i + 1 < len(lineas) else ""
+            if not _sigue_en_la_linea_siguiente(linea, siguiente):
+                bloques.append(actual)
+                actual = ""
+        if actual:
+            bloques.append(actual)
+    return bloques
+
+
+@app.template_filter("extracto")
+def extracto(texto, largo=220):
+    """Unas líneas de entrada para listados: el texto seguido, cortado en una palabra."""
+    partes = []
+    for bloque in _bloques(texto):
+        partes.append(bloque if bloque.endswith(_FIN_DE_FRASE) else bloque + ".")
+    seguido = " ".join(partes)
+    if len(seguido) <= largo:
+        return seguido
+    return seguido[:largo].rsplit(" ", 1)[0].rstrip(",;:") + "…"
 
 
 @app.template_filter("parrafos")

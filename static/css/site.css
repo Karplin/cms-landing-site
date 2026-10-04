@@ -714,6 +714,8 @@ p{margin:0;}
   font-family:"Abhaya Libre",Georgia,serif;font-size:30px;font-weight:700;line-height:1;
   color:var(--accent-ink);
 }
+/* Un rango («7 al 9») no cabe a tamaño de cifra: se reduce y puede partirse */
+.item-date .d--rango{font-size:17px;line-height:1.15;}
 .item-date .m{
   font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-faint);
   margin-top:4px;
