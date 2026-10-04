@@ -72,20 +72,6 @@
 </article>
 {%- endmacro %}
 
-{% macro tarjeta_proyecto(proyecto) -%}
-<article class="project">
-  <div class="project-visual" data-tone="{{ proyecto.tone }}" aria-hidden="true"></div>
-  <div class="project-body">
-    <p class="project-area">{{ proyecto.area_label }}</p>
-    <h3>{{ proyecto.title }}</h3>
-    <p class="place">{{ proyecto.place }}</p>
-    {% set destino = proyecto.href if proyecto.href and proyecto.href != '#'
-                     else url_for('proyecto_detalle', item_id=proyecto.id) %}
-    <a class="link-more" href="{{ destino }}">Ver el proyecto</a>
-  </div>
-</article>
-{%- endmacro %}
-
 {% macro item_fecha(item, url=None) -%}
 <li class="item">
   <div class="item-date"><p class="d {{ 'd--rango' if item.day|length > 2 }}">{{ item.day }}</p><p class="m">{{ item.month }}</p></div>

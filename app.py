@@ -5,13 +5,14 @@ Portada pública renderizada desde SQLite y panel de administración en /admin.
 Arranque:  python app.py   ->  http://127.0.0.1:5000
 """
 
+import mimetypes
 import os
 import re
 import secrets
 from functools import wraps
 
-from flask import (Flask, abort, flash, redirect, render_template, request,
-                   session, url_for)
+from flask import (Flask, Response, abort, flash, redirect, render_template,
+                   request, session, url_for)
 from werkzeug.utils import secure_filename
 from markupsafe import Markup, escape
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -25,7 +26,6 @@ from schema import (CONTENT_TYPES, SECTION_FIELDS, SECTION_KEYS,
 NAV = [
     {"endpoint": "campana", "label": "DOMUND", "children": None},
     {"endpoint": "quienes_somos", "label": "Quiénes somos", "children": "areas"},
-    {"endpoint": "programas", "label": "Programas", "children": None},
     {"endpoint": None, "label": "Noticias y eventos",
      "children": [("noticias", "Noticias"), ("eventos", "Eventos")]},
     {"endpoint": "documentacion", "label": "Documentación", "children": None},
@@ -157,6 +157,12 @@ def enlace_tel(telefono):
     return "tel:+%s" % digitos if digitos else "#"
 
 
+@app.template_filter("lineas")
+def lineas(texto):
+    """Lista guardada como una URL por línea (galerías)."""
+    return [l.strip() for l in (texto or "").splitlines() if l.strip()]
+
+
 @app.template_filter("primer_parrafo")
 def primer_parrafo(texto):
     bloques = _bloques(texto)
@@ -202,14 +208,14 @@ def inject_site():
     }
 
 
-UPLOAD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "uploads")
-EXTENSIONES = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg", ".pdf"}
+# SVG fuera: puede llevar código y se serviría desde nuestro propio dominio.
+EXTENSIONES = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".pdf"}
 MAX_SUBIDA = 8 * 1024 * 1024          # 8 MB por archivo
-app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
+app.config["MAX_CONTENT_LENGTH"] = 64 * 1024 * 1024   # una galería entera de una vez
 
 
 def guardar_archivo(archivo):
-    """Guarda una subida y devuelve su ruta pública, o None si no sirve."""
+    """Guarda una subida en la base de datos y devuelve su URL pública."""
     if not archivo or not archivo.filename:
         return None
 
@@ -217,35 +223,49 @@ def guardar_archivo(archivo):
     base, extension = os.path.splitext(nombre)
     extension = extension.lower()
     if extension not in EXTENSIONES:
-        raise ValueError("Formato no admitido: usa JPG, PNG, WEBP, GIF, SVG o PDF.")
+        raise ValueError("Formato no admitido en «%s»: usa JPG, PNG, WEBP, GIF o PDF."
+                         % archivo.filename)
+
+    datos = archivo.read()
+    if len(datos) > MAX_SUBIDA:
+        raise ValueError("«%s» pesa más de 8 MB." % archivo.filename)
 
     base = re.sub(r"[^a-z0-9-]+", "-", base.lower()).strip("-") or "archivo"
-    os.makedirs(UPLOAD_DIR, exist_ok=True)
-
     destino = "%s%s" % (base, extension)
     contador = 2
-    while os.path.exists(os.path.join(UPLOAD_DIR, destino)):
+    while db.media_existe(destino):
         destino = "%s-%d%s" % (base, contador, extension)
         contador += 1
 
-    archivo.save(os.path.join(UPLOAD_DIR, destino))
-    return url_for("static", filename="uploads/%s" % destino)
+    tipo = mimetypes.guess_type(destino)[0] or "application/octet-stream"
+    db.guardar_media(destino, tipo, datos)
+    return url_for("media", nombre=destino)
 
 
 def collect_con_archivos(fields, form, files, fila_actual=None):
-    """Como collect, pero los campos de imagen conservan o reemplazan el archivo."""
+    """Como collect, pero gestiona los campos de imagen y de galería."""
     valores = collect(fields, form)
+    actual = fila_actual or {}
     for campo in fields:
-        if campo["type"] != "image":
-            continue
         nombre = campo["name"]
-        subido = guardar_archivo(files.get(nombre))
-        if subido:
-            valores[nombre] = subido
-        elif form.get(nombre + "__borrar"):
-            valores[nombre] = ""
-        else:
-            valores[nombre] = (fila_actual or {}).get(nombre, "") or form.get(nombre, "")
+
+        if campo["type"] == "image":
+            subido = guardar_archivo(files.get(nombre))
+            if subido:
+                valores[nombre] = subido
+            elif form.get(nombre + "__borrar"):
+                valores[nombre] = ""
+            else:
+                valores[nombre] = actual.get(nombre, "") or form.get(nombre, "")
+
+        elif campo["type"] == "gallery":
+            quitar = set(form.getlist(nombre + "__quitar"))
+            fotos = [u for u in lineas(actual.get(nombre, "")) if u not in quitar]
+            for archivo in files.getlist(nombre):
+                subido = guardar_archivo(archivo)
+                if subido:
+                    fotos.append(subido)
+            valores[nombre] = "\n".join(fotos)
     return valores
 
 
@@ -306,7 +326,6 @@ def index():
         "index.html",
         slides=db.list_rows("slides", only_published=True),
         areas=db.list_rows("areas", only_published=True),
-        projects=db.list_rows("projects", only_published=True),
         news=db.list_rows("news", only_published=True),
         events=db.list_rows("events", only_published=True),
         bulletins=[fila for fila in documentos if fila["doc_group"] == "boletin"],
@@ -348,19 +367,33 @@ def campana():
     )
 
 
+@app.route("/media/<path:nombre>")
+def media(nombre):
+    """Sirve un archivo subido desde el panel."""
+    fila = db.leer_media(nombre)
+    if fila is None:
+        abort(404)
+    respuesta = Response(fila["data"], mimetype=fila["content_type"])
+    # El nombre nunca se reutiliza: se puede cachear para siempre
+    respuesta.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+    respuesta.headers["X-Content-Type-Options"] = "nosniff"
+    return respuesta
+
+
+@app.route("/programas")
+@app.route("/programas/<int:item_id>")
+@app.route("/territorio")
+@app.route("/territorio/<int:item_id>")
+def seccion_retirada(item_id=None):
+    """Páginas que existieron: un enlace viejo lleva a la portada, no a un error."""
+    return redirect(url_for("index"), code=301)
+
+
 @app.route("/quienes-somos")
 def quienes_somos():
     return render_template(
         "quienes_somos.html",
         areas=db.list_rows("areas", only_published=True),
-    )
-
-
-@app.route("/programas")
-def programas():
-    return render_template(
-        "programas.html",
-        projects=db.list_rows("projects", only_published=True),
     )
 
 
@@ -400,7 +433,7 @@ def _detalle(table, item_id, **extra):
 
 @app.route("/noticias/<int:item_id>")
 def noticia_detalle(item_id):
-    return _detalle("news", item_id, kicker="Noticias",
+    return _detalle("news", item_id, kicker="Noticias", portada_ancha=True,
                     volver=("noticias", "Todas las noticias"))
 
 
@@ -411,11 +444,6 @@ def evento_detalle(item_id):
 
 
 
-
-@app.route("/programas/<int:item_id>")
-def proyecto_detalle(item_id):
-    return _detalle("projects", item_id, kicker=None,
-                    volver=("programas", "Todos los proyectos"))
 
 
 @app.route("/quienes-somos/<int:item_id>")

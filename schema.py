@@ -54,22 +54,6 @@ CONTENT_TYPES = {
             {"name": "link_href", "label": "Enlace", "type": "text", "default": "#proyectos"},
         ],
     },
-    "projects": {
-        "label": "Proyectos",
-        "singular": "proyecto",
-        "help": "Tarjetas de la sección Nuestros proyectos.",
-        "list_columns": ["area_label", "title", "place"],
-        "fields": [
-            {"name": "area_label", "label": "Área", "type": "text", "required": True},
-            {"name": "title", "label": "Título", "type": "text", "required": True},
-            {"name": "place", "label": "Lugar", "type": "text"},
-            {"name": "href", "label": "Enlace", "type": "text", "default": "#"},
-            {"name": "tone", "label": "Color de cabecera", "type": "select",
-             "options": [("teal", "Verde azulado"), ("amber", "Terracota"), ("green", "Verde"),
-                         ("plum", "Ciruela")],
-             "default": "teal"},
-        ],
-    },
     "news": {
         "label": "Noticias",
         "singular": "noticia",
@@ -79,8 +63,14 @@ CONTENT_TYPES = {
             {"name": "month", "label": "Mes", "type": "text", "required": True,
              "help": "Abreviado: Ago, Sep, Oct..."},
             {"name": "title", "label": "Titular", "type": "text", "required": True},
-            {"name": "summary", "label": "Entradilla", "type": "textarea", "rows": 3},
-            {"name": "href", "label": "Enlace", "type": "text", "default": "#"},
+            {"name": "summary", "label": "Texto", "type": "textarea", "rows": 10,
+             "help": "Los listados muestran el comienzo; el texto completo sale en la página de la noticia."},
+            {"name": "photo", "label": "Foto de portada", "type": "image",
+             "help": "La imagen grande de la noticia y la miniatura del listado. Mejor horizontal."},
+            {"name": "gallery", "label": "Galería de fotos", "type": "gallery",
+             "help": "Puedes seleccionar varias a la vez; se añaden a las que ya hay."},
+            {"name": "href", "label": "Enlace", "type": "text", "default": "#",
+             "help": "Déjalo en # para que la noticia tenga su propia página."},
         ],
     },
     "events": {
@@ -159,7 +149,6 @@ BASE_COLUMNS = ["id", "position", "published"]
 
 SECTION_KEYS = [
     ("areas", "Áreas de trabajo"),
-    ("projects", "Proyectos"),
     ("news", "Noticias y eventos"),
     ("documents", "Documentación"),
     ("campaign", "Campaña (DOMUND)"),
@@ -191,13 +180,6 @@ SETTINGS_GROUPS = [
         "label": "Cabecera",
         "fields": [
             {"name": "header_login", "label": "Texto del botón de acceso", "type": "text"},
-        ],
-    },
-    {
-        "label": "Proyectos",
-        "fields": [
-            {"name": "projects_cta_label", "label": "Botón bajo los proyectos", "type": "text"},
-            {"name": "projects_cta_href", "label": "Enlace del botón", "type": "text"},
         ],
     },
     {

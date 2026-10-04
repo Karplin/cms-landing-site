@@ -27,7 +27,22 @@
     </div>
     {% endif %}
     <input id="{{ name }}" name="{{ name }}" type="file"
-           accept=".jpg,.jpeg,.png,.webp,.gif,.svg">
+           accept=".jpg,.jpeg,.png,.webp,.gif">
+
+  {% elif spec.type == 'gallery' %}
+    {% set fotos = (value or '').split('\n')|map('trim')|select|list %}
+    {% if fotos %}
+    <p class="hint">{{ fotos|length }} foto{{ 's' if fotos|length != 1 }}. Marca las que quieras quitar.</p>
+    <div class="gallery-current">
+      {% for url in fotos %}
+      <label class="gallery-thumb">
+        <img src="{{ url }}" alt="" loading="lazy">
+        <span><input type="checkbox" name="{{ name }}__quitar" value="{{ url }}"> Quitar</span>
+      </label>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <input id="{{ name }}" name="{{ name }}" type="file" multiple accept=".jpg,.jpeg,.png,.webp,.gif">
 
   {% elif spec.type == 'number' %}
     <input id="{{ name }}" name="{{ name }}" type="number" value="{{ value if value is not none else '' }}"

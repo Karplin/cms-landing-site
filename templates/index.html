@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import encabezado, tarjeta_area, tarjeta_proyecto, item_fecha, fila_doc with context %}
+{% from "_macros.html" import encabezado, tarjeta_area, item_fecha, fila_doc with context %}
 
 {% block content %}
 
@@ -53,21 +53,6 @@
       {% for area in areas %}{{ tarjeta_area(area) }}{% endfor %}
     </div>
     <p class="band-cta"><a class="btn btn--ghost" href="{{ url_for('quienes_somos') }}">Conocer el instituto</a></p>
-  </div>
-</section>
-{% endif %}
-
-{# ============================ PROYECTOS ============================ #}
-{% if projects %}
-<section class="band">
-  <div class="wrap">
-    {{ encabezado('projects') }}
-    <div class="projects">
-      {% for proyecto in projects %}{{ tarjeta_proyecto(proyecto) }}{% endfor %}
-    </div>
-    <p class="band-cta">
-      <a class="btn btn--ghost" href="{{ url_for('programas') }}">{{ settings.projects_cta_label }}</a>
-    </p>
   </div>
 </section>
 {% endif %}

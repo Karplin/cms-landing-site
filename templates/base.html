@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap">
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
+<link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
 <script>
   /* Aplica el tema guardado antes de pintar, para que no parpadee. */
@@ -22,12 +24,12 @@
 </head>
 <body>
 
-{% from "_macros.html" import emblema with context %}
 
 <header class="site-header">
   <div class="header-top">
     <a class="brand" href="{{ url_for('index') }}">
-      {{ emblema() }}
+      <img class="brand-logo" src="{{ url_for('static', filename='img/logo-omp-marca.png') }}"
+           alt="OMP" width="101" height="56">
       <span>
         <span class="brand-name">{{ settings.brand_name|nl2br }}</span>
         <span class="brand-sub">{{ settings.brand_sub }}</span>

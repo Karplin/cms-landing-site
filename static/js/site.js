@@ -76,6 +76,62 @@
     });
   }
 
+  /* --- Galería: visor a pantalla completa --- */
+  var fotos = Array.prototype.slice.call(document.querySelectorAll("[data-galeria]"));
+  if (fotos.length) {
+    var visor = document.createElement("div");
+    visor.className = "visor";
+    visor.hidden = true;
+    visor.setAttribute("role", "dialog");
+    visor.setAttribute("aria-modal", "true");
+    visor.setAttribute("aria-label", "Foto ampliada");
+    visor.innerHTML =
+      '<button type="button" class="visor-cerrar" aria-label="Cerrar">×</button>' +
+      '<button type="button" class="visor-ant" aria-label="Foto anterior">‹</button>' +
+      '<img alt="">' +
+      '<button type="button" class="visor-sig" aria-label="Foto siguiente">›</button>' +
+      '<p class="visor-cuenta"></p>';
+    document.body.appendChild(visor);
+
+    var imagen = visor.querySelector("img");
+    var cuenta = visor.querySelector(".visor-cuenta");
+    var abierta = 0;
+    var origen = null;
+
+    var mostrar = function (i) {
+      abierta = (i + fotos.length) % fotos.length;
+      imagen.src = fotos[abierta].getAttribute("href");
+      imagen.alt = fotos[abierta].querySelector("img").alt;
+      cuenta.textContent = (abierta + 1) + " / " + fotos.length;
+    };
+    var cerrar = function () {
+      visor.hidden = true;
+      document.body.style.overflow = "";
+      if (origen) origen.focus();
+    };
+
+    fotos.forEach(function (enlace, i) {
+      enlace.addEventListener("click", function (evento) {
+        evento.preventDefault();
+        origen = enlace;
+        mostrar(i);
+        visor.hidden = false;
+        document.body.style.overflow = "hidden";
+        visor.querySelector(".visor-cerrar").focus();
+      });
+    });
+    visor.querySelector(".visor-cerrar").addEventListener("click", cerrar);
+    visor.querySelector(".visor-ant").addEventListener("click", function () { mostrar(abierta - 1); });
+    visor.querySelector(".visor-sig").addEventListener("click", function () { mostrar(abierta + 1); });
+    visor.addEventListener("click", function (evento) { if (evento.target === visor) cerrar(); });
+    document.addEventListener("keydown", function (evento) {
+      if (visor.hidden) return;
+      if (evento.key === "Escape") cerrar();
+      if (evento.key === "ArrowLeft") mostrar(abierta - 1);
+      if (evento.key === "ArrowRight") mostrar(abierta + 1);
+    });
+  }
+
   /* --- Aviso de cookies --- */
   var cookie = document.getElementById("cookie");
   var ok = document.getElementById("cookie-ok");

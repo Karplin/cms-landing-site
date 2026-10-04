@@ -18,14 +18,33 @@
 <section class="band">
   <div class="wrap detail-body">
     {% if fila.photo is defined and fila.photo %}
+      {% if portada_ancha %}
+      <figure class="detail-cover">
+        <img src="{{ fila.photo }}" alt="{{ fila.title }}">
+      </figure>
+      {% else %}
       <a href="{{ fila.photo }}" target="_blank" rel="noopener">
         <img class="detail-photo" src="{{ fila.photo }}" alt="{{ fila.title }}">
       </a>
+      {% endif %}
     {% endif %}
     {% if fila.body is defined and fila.body %}
       <div class="prose">{{ fila.body|parrafos }}</div>
     {% elif fila.summary is defined and fila.summary %}
       <div class="prose">{{ fila.summary|parrafos }}</div>
+    {% endif %}
+    {% set fotos = fila.gallery|lineas if fila.gallery is defined else [] %}
+    {% if fotos %}
+    <section class="gallery" aria-label="Galería de fotos">
+      <h2 class="gallery-title">Galería <span>{{ fotos|length }} fotos</span></h2>
+      <div class="gallery-grid">
+        {% for url in fotos %}
+        <a class="gallery-item" href="{{ url }}" data-galeria>
+          <img src="{{ url }}" alt="Foto {{ loop.index }} de {{ fotos|length }}" loading="lazy">
+        </a>
+        {% endfor %}
+      </div>
+    </section>
     {% endif %}
     {% if fila.place is defined and fila.place and fila.area_label is defined %}
       <p class="detail-meta">{{ fila.area_label }} · {{ fila.place }}</p>

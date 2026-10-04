@@ -34,8 +34,6 @@
           <td>La franja grande de la portada, que va rotando</td></tr>
       <tr><td><a href="{{ url_for('admin_list', table='areas') }}">Áreas de trabajo</a></td>
           <td>Las cuatro tarjetas de la portada y la página <em>Quiénes somos</em></td></tr>
-      <tr><td><a href="{{ url_for('admin_list', table='projects') }}">Proyectos</a></td>
-          <td>Las tarjetas con imagen de la portada y la página <em>Programas</em></td></tr>
       <tr><td><a href="{{ url_for('admin_list', table='news') }}">Noticias</a> y
               <a href="{{ url_for('admin_list', table='events') }}">Eventos</a></td>
           <td>Las dos columnas de la portada y la página <em>Noticias y eventos</em></td></tr>
@@ -72,13 +70,14 @@
   </div>
 
   <div class="card guide-task">
-    <h3>Añadir un proyecto</h3>
+    <h3>Añadir fotos a una noticia</h3>
     <ol>
-      <li>Menú izquierdo → <strong>Proyectos</strong> → <strong>Añadir proyecto</strong>.</li>
-      <li><strong>Área</strong> es la etiqueta pequeña de arriba (por ejemplo <em>Educación Comunitaria</em>).</li>
-      <li><strong>Lugar</strong> es la línea gris de abajo: ciudad y país.</li>
-      <li><strong>Color de cabecera</strong> elige el tono del rectángulo superior. Alterna los cuatro para que las tarjetas no salgan todas iguales.</li>
+      <li>Menú izquierdo → <strong>Noticias</strong> → <strong>Editar</strong> en la noticia.</li>
+      <li><strong>Foto de portada</strong>: la imagen grande de arriba y la miniatura del listado.</li>
+      <li><strong>Galería</strong>: puedes seleccionar varias fotos a la vez. Se añaden a las que ya hay.</li>
+      <li>Para quitar una foto de la galería, marca su casilla <strong>Quitar</strong> y guarda.</li>
     </ol>
+    <p class="guide-tip">Usa fotos horizontales para la portada. JPG o PNG, hasta 8&nbsp;MB cada una.</p>
   </div>
 
   <div class="card guide-task">
@@ -90,7 +89,7 @@
       <li>Se guardan todos juntos con el botón del final.</li>
     </ol>
     <p class="guide-tip">Estos títulos también encabezan las páginas interiores. Si cambias
-      «Nuestros proyectos», cambia a la vez en la portada y en la cabecera de <em>Programas</em>.</p>
+      «Las cuatro Obras», cambia a la vez en la portada y en la cabecera de <em>Quiénes somos</em>.</p>
   </div>
 
   <div class="card guide-task">
@@ -141,9 +140,9 @@
   <h2>Consejos para los textos</h2>
   <ul class="guide-list">
     <li><strong>Titulares cortos.</strong> Dos líneas como mucho. Los muy largos descuadran las tarjetas.</li>
-    <li><strong>Entradillas de una o dos frases.</strong> El sitio no recorta el texto: lo que escribas se ve entero.</li>
+    <li><strong>Empieza por lo importante.</strong> Los listados muestran solo el comienzo del texto; el resto se lee en la página de la noticia.</li>
     <li><strong>Fechas abreviadas</strong> en el mes: <code>Ene</code>, <code>Feb</code>, <code>Mar</code>…</li>
-    <li><strong>Mantén un número par de tarjetas</strong> en áreas y proyectos (dos o cuatro): la rejilla queda cuadrada.</li>
+    <li><strong>Mantén un número par de tarjetas</strong> en las áreas (dos o cuatro): la rejilla queda cuadrada.</li>
   </ul>
 </section>
 
@@ -154,7 +153,6 @@
   <ul class="guide-list">
     <li>Las entradas del <strong>menú principal</strong> y las páginas que existen.</li>
     <li>Los <strong>colores</strong> y las <strong>tipografías</strong>.</li>
-    <li>Subir <strong>fotografías</strong>: hoy las cabeceras de proyecto son bloques de color, no imágenes.</li>
     <li>Añadir <strong>campos nuevos</strong> a un tipo de contenido.</li>
   </ul>
 </section>

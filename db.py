@@ -25,6 +25,7 @@ USING_POSTGRES = bool(DATABASE_URL)
 
 _SQL_TYPES = {"number": "INTEGER", "checkbox": "INTEGER"}
 _SERIAL = "id SERIAL PRIMARY KEY" if USING_POSTGRES else "id INTEGER PRIMARY KEY AUTOINCREMENT"
+_BINARIO = "BYTEA" if USING_POSTGRES else "BLOB"
 
 
 # ---------------------------------------------------------------------------
@@ -196,6 +197,17 @@ def _crear_y_sembrar():
         " password_hash TEXT NOT NULL,"
         " role TEXT NOT NULL DEFAULT 'admin',"
         " active INTEGER NOT NULL DEFAULT 1)".format(_SERIAL),
+        commit=False,
+    )
+    # Archivos subidos desde el panel. Van en la base y no en disco porque el
+    # disco de Render se borra en cada despliegue.
+    ejecutar(
+        "CREATE TABLE IF NOT EXISTS media ("
+        " {},"
+        " name TEXT NOT NULL UNIQUE,"
+        " content_type TEXT NOT NULL,"
+        " size INTEGER NOT NULL DEFAULT 0,"
+        " data {} NOT NULL)".format(_SERIAL, _BINARIO),
         commit=False,
     )
     confirmar()
@@ -436,3 +448,28 @@ def set_user_password(user_id, password_hash):
 
 def delete_user(user_id):
     ejecutar("DELETE FROM users WHERE id = ?", (user_id,))
+
+
+# ---------------------------------------------------------------------------
+# Archivos subidos
+# ---------------------------------------------------------------------------
+
+def media_existe(nombre):
+    return consultar_una("SELECT 1 AS x FROM media WHERE name = ?", (nombre,)) is not None
+
+
+def guardar_media(nombre, content_type, datos):
+    if USING_POSTGRES:
+        import psycopg2
+        valor = psycopg2.Binary(datos)
+    else:
+        valor = sqlite3.Binary(datos)
+    ejecutar("INSERT INTO media (name, content_type, size, data) VALUES (?, ?, ?, ?)",
+             (nombre, content_type, len(datos), valor))
+
+
+def leer_media(nombre):
+    fila = consultar_una("SELECT content_type, data FROM media WHERE name = ?", (nombre,))
+    if fila is not None:
+        fila["data"] = bytes(fila["data"])
+    return fila

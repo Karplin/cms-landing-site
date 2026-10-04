@@ -7,8 +7,6 @@ SEED = {
         "brand_name": "Instituto de\nCooperación Regional",
         "brand_sub": "Sedes territoriales",
         "header_login": "Acceso",
-        "projects_cta_label": "Ver todos los proyectos",
-        "projects_cta_href": "/programas",
         "news_col_title": "Noticias",
         "news_col_link": "Todas",
         "events_col_title": "Eventos",
@@ -54,12 +52,6 @@ SEED = {
             "title": "Las cuatro áreas de trabajo",
             "subtitle": "Un mismo método en veintiocho territorios: acompañar a las organizaciones "
                         "que ya existen, en lugar de sustituirlas.",
-        },
-        "projects": {
-            "eyebrow": "Programas",
-            "title": "Nuestros proyectos",
-            "subtitle": "Cada proyecto se formula con la organización local que lo va a sostener "
-                        "y se publica con su presupuesto abierto.",
         },
         "news": {
             "eyebrow": "Actualidad",
@@ -166,28 +158,6 @@ SEED = {
 
 
 
-    "projects": [
-        {
-            "area_label": "Educación Comunitaria",
-            "title": "Aula multigrado y biblioteca escolar en Santa Rosa",
-            "place": "Cajamarca, Perú", "href": "/programas", "tone": "teal",
-        },
-        {
-            "area_label": "Agua y Territorio",
-            "title": "Sistema de agua potable para 240 familias",
-            "place": "Sololá, Guatemala", "href": "/programas", "tone": "amber",
-        },
-        {
-            "area_label": "Salud Territorial",
-            "title": "Centro de atención primaria para comunidades ribereñas",
-            "place": "Riberalta, Bolivia", "href": "/programas", "tone": "green",
-        },
-        {
-            "area_label": "Formación y Liderazgo",
-            "title": "Séptima cohorte de la Escuela de Liderazgo Juvenil",
-            "place": "Encarnación, Paraguay", "href": "/programas", "tone": "plum",
-        },
-    ],
 
     "news": [],
 

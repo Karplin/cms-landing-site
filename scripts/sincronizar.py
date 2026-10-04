@@ -69,6 +69,25 @@ def columnas_locales(con, tabla):
     return [fila[1] for fila in con.execute("PRAGMA table_info(%s)" % tabla)]
 
 
+def _a_json(valor):
+    """Los binarios (archivos subidos) van en base64 en la copia de seguridad."""
+    import base64
+    if isinstance(valor, (bytes, memoryview)):
+        return {"base64": base64.b64encode(bytes(valor)).decode("ascii")}
+    return str(valor)
+
+
+def _sincronizar_media(nombres_origen, nombres_destino, leer, escribir, borrar):
+    """Copia solo los archivos que faltan y quita los que sobran en el destino."""
+    faltan = sorted(nombres_origen - nombres_destino)
+    sobran = sorted(nombres_destino - nombres_origen)
+    for nombre in faltan:
+        escribir(leer(nombre))
+    for nombre in sobran:
+        borrar(nombre)
+    return len(faltan), len(sobran)
+
+
 def bajar():
     url = os.environ.get("PROD_DATABASE_URL") or leer_env().get("PROD_DATABASE_URL")
     if not url:
@@ -135,6 +154,25 @@ def bajar():
             (a["key"], a["value"]),
         )
     print("  %-13s %d ajustes" % ("settings", len(ajustes)))
+
+    if "media" in en_prod:
+        cur.execute("SELECT name FROM media")
+        en_origen = {f["name"] for f in cur.fetchall()}
+        en_local = {f[0] for f in local.execute("SELECT name FROM media")}
+
+        def leer(nombre):
+            cur.execute("SELECT * FROM media WHERE name = %s", (nombre,))
+            return cur.fetchone()
+
+        def escribir(f):
+            local.execute("INSERT INTO media (name, content_type, size, data) VALUES (?, ?, ?, ?)",
+                          (f["name"], f["content_type"], f["size"], bytes(f["data"])))
+
+        nuevos, quitados = _sincronizar_media(
+            en_origen, en_local, leer, escribir,
+            lambda n: local.execute("DELETE FROM media WHERE name = ?", (n,)))
+        print("  %-13s %d nuevos, %d quitados" % ("media", nuevos, quitados))
+
     print("  %-13s no se copian (el acceso local no cambia)" % "users")
 
     local.commit()
@@ -181,7 +219,7 @@ def subir():
     ruta_copia = os.path.join(RAIZ, "backups", "prod-%s.json" %
                               datetime.now().strftime("%Y%m%d-%H%M%S"))
     with open(ruta_copia, "w", encoding="utf-8") as f:
-        json.dump(copia, f, ensure_ascii=False, indent=1, default=str)
+        json.dump(copia, f, ensure_ascii=False, indent=1, default=_a_json)
     print("Copia de producción: %s" % os.path.relpath(ruta_copia, RAIZ), flush=True)
 
     # 2. Esquema al día (columnas y tablas nuevas)
@@ -222,6 +260,21 @@ def subir():
                 "ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value",
                 (a["key"], a["value"]))
         print("  %-13s %d ajustes" % ("settings", len(ajustes)))
+
+        cur.execute("SELECT name FROM media")
+        en_prod_media = {f["name"] for f in cur.fetchall()}
+        en_local = {f[0] for f in local.execute("SELECT name FROM media")}
+
+        def escribir(f):
+            cur.execute("INSERT INTO media (name, content_type, size, data) VALUES (%s, %s, %s, %s)",
+                        (f["name"], f["content_type"], f["size"], psycopg2.Binary(f["data"])))
+
+        nuevos, quitados = _sincronizar_media(
+            en_local, en_prod_media,
+            lambda n: local.execute("SELECT * FROM media WHERE name = ?", (n,)).fetchone(),
+            escribir,
+            lambda n: cur.execute("DELETE FROM media WHERE name = %s", (n,)))
+        print("  %-13s %d nuevos, %d quitados" % ("media", nuevos, quitados))
         print("  %-13s no se tocan" % "users")
 
         prod.commit()
