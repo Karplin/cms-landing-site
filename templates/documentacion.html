@@ -7,23 +7,22 @@
 
 <section class="band">
   <div class="wrap">
-    <div class="docs">
+    {% set mostrar_enlace = False %}
+    {% set columnas = [] %}
+    {% if bulletins %}{% set _ = columnas.append((settings.docs_col1_title, settings.docs_col1_link, bulletins)) %}{% endif %}
+    {% if reports %}{% set _ = columnas.append((settings.docs_col2_title, settings.docs_col2_link, reports)) %}{% endif %}
+    <div class="docs {{ 'docs--una' if columnas|length == 1 }}">
+      {% for titulo, enlace, docs in columnas %}
       <div>
-        <div class="col-head"><h3>{{ settings.docs_col1_title }}</h3></div>
-        {% if bulletins %}
-        <ul class="doc-list">{% for doc in bulletins %}{{ fila_doc(doc) }}{% endfor %}</ul>
-        {% else %}
-        <p class="empty-note">Sin boletines publicados.</p>
+        {% if columnas|length > 1 %}
+        <div class="col-head">
+          <h3>{{ titulo }}</h3>
+          {% if mostrar_enlace %}<a class="link-more" href="{{ url_for('documentacion') }}">{{ enlace }}</a>{% endif %}
+        </div>
         {% endif %}
+        <ul class="doc-list">{% for doc in docs %}{{ fila_doc(doc) }}{% endfor %}</ul>
       </div>
-      <div>
-        <div class="col-head"><h3>{{ settings.docs_col2_title }}</h3></div>
-        {% if reports %}
-        <ul class="doc-list">{% for doc in reports %}{{ fila_doc(doc) }}{% endfor %}</ul>
-        {% else %}
-        <p class="empty-note">Sin memorias publicadas.</p>
-        {% endif %}
-      </div>
+      {% endfor %}
     </div>
   </div>
 </section>

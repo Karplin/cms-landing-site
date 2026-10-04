@@ -68,7 +68,7 @@ SEED = {
         },
         "documents": {
             "eyebrow": "Documentación",
-            "title": "Boletines y memorias",
+            "title": "Documentos institucionales",
             "subtitle": "",
         },
         "campaign": {
@@ -204,31 +204,6 @@ SEED = {
     ],
 
     "documents": [
-        {
-            "doc_group": "boletin", "title": "N.º 24 — Julio 2026",
-            "meta": "Balance semestral y agenda del Encuentro Regional",
-            "size_label": "Descargar (4,9 MB)", "href": "#",
-        },
-        {
-            "doc_group": "boletin", "title": "N.º 23 — Marzo 2026",
-            "meta": "Especial: agua y gobierno comunitario",
-            "size_label": "Descargar (4,1 MB)", "href": "#",
-        },
-        {
-            "doc_group": "boletin", "title": "N.º 22 — Noviembre 2025",
-            "meta": "Resultados de la sexta cohorte de liderazgo",
-            "size_label": "Descargar (3,6 MB)", "href": "#",
-        },
-        {
-            "doc_group": "memoria", "title": "Memoria Anual 2025",
-            "meta": "Estados financieros auditados incluidos",
-            "size_label": "Descargar (9,2 MB)", "href": "#",
-        },
-        {
-            "doc_group": "memoria", "title": "Memoria Anual 2024",
-            "meta": "Primer año con presupuesto abierto por proyecto",
-            "size_label": "Descargar (8,7 MB)", "href": "#",
-        },
         {
             "doc_group": "memoria", "title": "Estatuto de las Obras Misionales Pontificias",
             "meta": "Versión aprobada · 29 páginas",

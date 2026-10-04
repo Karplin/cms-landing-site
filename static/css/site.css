@@ -727,6 +727,7 @@ p{margin:0;}
 /* Documentación */
 .docs{display:grid;grid-template-columns:1fr 1fr;gap:56px;margin-top:44px;}
 .doc-list{list-style:none;margin:0;padding:0;}
+.docs--una{grid-template-columns:1fr;max-width:820px;margin-left:auto;margin-right:auto;}
 .doc{
   display:flex;align-items:center;gap:16px;
   padding:16px 0;border-bottom:1px solid var(--line);
