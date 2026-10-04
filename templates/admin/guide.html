@@ -34,10 +34,6 @@
           <td>La franja grande de la portada, que va rotando</td></tr>
       <tr><td><a href="{{ url_for('admin_list', table='areas') }}">Áreas de trabajo</a></td>
           <td>Las cuatro tarjetas de la portada y la página <em>Quiénes somos</em></td></tr>
-      <tr><td><a href="{{ url_for('admin_list', table='voices') }}">Voces del territorio</a></td>
-          <td>El carrusel de la portada y la página <em>Presencia territorial</em></td></tr>
-      <tr><td><a href="{{ url_for('admin_list', table='counters') }}">Contadores</a></td>
-          <td>Las cifras grandes de la portada y de <em>Quiénes somos</em></td></tr>
       <tr><td><a href="{{ url_for('admin_list', table='projects') }}">Proyectos</a></td>
           <td>Las tarjetas con imagen de la portada y la página <em>Programas</em></td></tr>
       <tr><td><a href="{{ url_for('admin_list', table='news') }}">Noticias</a> y
@@ -45,9 +41,11 @@
           <td>Las dos columnas de la portada y la página <em>Noticias y eventos</em></td></tr>
       <tr><td><a href="{{ url_for('admin_list', table='documents') }}">Documentación</a></td>
           <td>Boletines y memorias descargables, en la portada y en <em>Documentación</em></td></tr>
-      <tr><td><a href="{{ url_for('admin_list', table='footer_links') }}">Enlaces del pie</a> y
+      <tr><td><a href="{{ url_for('admin_list', table='founders') }}">Fundadores</a></td>
+          <td>Los retratos de la página <em>DOMUND</em></td></tr>
+      <tr><td><a href="{{ url_for('admin_list', table='footer_links') }}">Sitios de interés</a> y
               <a href="{{ url_for('admin_list', table='legal_links') }}">Enlaces legales</a></td>
-          <td>Las columnas del pie oscuro y la línea inferior, en todas las páginas</td></tr>
+          <td>Los enlaces a otras webs del pie y la línea inferior, en todas las páginas</td></tr>
       <tr><td><a href="{{ url_for('admin_sections') }}">Encabezados de sección</a></td>
           <td>El titulillo, el título y la frase que abren cada bloque, y que titulan las páginas interiores</td></tr>
       <tr><td><a href="{{ url_for('admin_settings') }}">Ajustes generales</a></td>
@@ -145,7 +143,6 @@
     <li><strong>Titulares cortos.</strong> Dos líneas como mucho. Los muy largos descuadran las tarjetas.</li>
     <li><strong>Entradillas de una o dos frases.</strong> El sitio no recorta el texto: lo que escribas se ve entero.</li>
     <li><strong>Fechas abreviadas</strong> en el mes: <code>Ene</code>, <code>Feb</code>, <code>Mar</code>…</li>
-    <li><strong>Cifras con el separador que prefieras.</strong> Los contadores se muestran tal cual los escribas.</li>
     <li><strong>Mantén un número par de tarjetas</strong> en áreas y proyectos (dos o cuatro): la rejilla queda cuadrada.</li>
   </ul>
 </section>

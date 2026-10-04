@@ -13,14 +13,18 @@
     {% if filas %}
     <div class="feed">
       {% for fila in filas %}
-      <article class="feed-item">
+      <article class="feed-item {{ 'feed-item--photo' if fila.photo }}">
         <a class="feed-visual" href="{{ fila.url }}" aria-hidden="true" tabindex="-1">
+          {% if fila.photo %}
+          <img class="feed-photo" src="{{ fila.photo }}" alt="">
+          {% else %}
           <span class="mondo-visual" data-tone="{{ ['teal','amber','green','plum'][loop.index0 % 4] }}"></span>
+          {% endif %}
         </a>
         <div class="feed-body">
           <p class="feed-date">{{ fila.day }} {{ fila.month }}</p>
           <h3><a href="{{ fila.url }}">{{ fila.title }}</a></h3>
-          {% if fila.summary %}<p class="feed-summary">{{ fila.summary }}</p>{% endif %}
+          {% if fila.summary %}<div class="feed-summary">{{ fila.summary|parrafos }}</div>{% endif %}
           <a class="link-more" href="{{ fila.url }}">Leer más</a>
         </div>
       </article>

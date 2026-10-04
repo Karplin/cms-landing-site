@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import encabezado, tarjeta_area, tarjeta_voz, tarjeta_proyecto, item_fecha, fila_doc with context %}
+{% from "_macros.html" import encabezado, tarjeta_area, tarjeta_proyecto, item_fecha, fila_doc with context %}
 
 {% block content %}
 
@@ -53,36 +53,6 @@
       {% for area in areas %}{{ tarjeta_area(area) }}{% endfor %}
     </div>
     <p class="band-cta"><a class="btn btn--ghost" href="{{ url_for('quienes_somos') }}">Conocer el instituto</a></p>
-  </div>
-</section>
-{% endif %}
-
-{# ============================ VOCES ============================ #}
-{% if voices %}
-<section class="band band--cream band--tight">
-  <div class="wrap">
-    {{ encabezado('voices') }}
-    <div class="voices">
-      {% for voz in voices %}{{ tarjeta_voz(voz) }}{% endfor %}
-    </div>
-    <p class="band-cta"><a class="btn btn--ghost" href="{{ url_for('territorio') }}">Ver todas las sedes</a></p>
-  </div>
-</section>
-{% endif %}
-
-{# ============================ CONTADORES ============================ #}
-{% if counters %}
-<section class="band band--cream band--tight">
-  <div class="wrap">
-    {{ encabezado('counters') }}
-    <div class="counters">
-      {% for contador in counters %}
-      <div class="counter">
-        <p class="num">{{ contador.number }}</p>
-        <p class="label">{{ contador.label }}</p>
-      </div>
-      {% endfor %}
-    </div>
   </div>
 </section>
 {% endif %}

@@ -72,17 +72,6 @@
 </article>
 {%- endmacro %}
 
-{% macro tarjeta_voz(voz) -%}
-<article class="voice">
-  <div class="voice-head">
-    <span class="voice-place">{{ voz.place }}</span>
-    <span class="voice-date">{{ voz.date_label }}</span>
-  </div>
-  <h3>{{ voz.title }}</h3>
-  <p>{{ voz.body }}</p>
-</article>
-{%- endmacro %}
-
 {% macro tarjeta_proyecto(proyecto) -%}
 <article class="project">
   <div class="project-visual" data-tone="{{ proyecto.tone }}" aria-hidden="true"></div>

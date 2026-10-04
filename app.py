@@ -28,7 +28,6 @@ NAV = [
     {"endpoint": "programas", "label": "Programas", "children": None},
     {"endpoint": None, "label": "Noticias y eventos",
      "children": [("noticias", "Noticias"), ("eventos", "Eventos")]},
-    {"endpoint": "territorio", "label": "Presencia territorial", "children": None},
     {"endpoint": "documentacion", "label": "Documentación", "children": None},
 ]
 
@@ -106,6 +105,15 @@ def parrafos(texto):
     return Markup("\n").join(html)
 
 
+@app.template_filter("enlace_tel")
+def enlace_tel(telefono):
+    """«809-482-2524, Ext. 117» -> «tel:+18094822524» (la extensión no se marca)."""
+    digitos = re.sub(r"\D", "", (telefono or "").split(",")[0])
+    if len(digitos) == 10:             # numeración del Plan de Norteamérica (RD)
+        digitos = "1" + digitos
+    return "tel:+%s" % digitos if digitos else "#"
+
+
 @app.template_filter("primer_parrafo")
 def primer_parrafo(texto):
     bloques = _bloques(texto)
@@ -146,10 +154,7 @@ def inject_site():
         "nav": menu,
         "settings": db.all_settings(),
         "sections": db.all_sections(),
-        "footer_links": {
-            clave: db.rows_by("footer_links", "column_key", clave)
-            for clave in ("institucion", "programas", "contacto")
-        },
+        "footer_links": db.list_rows("footer_links", only_published=True),
         "legal_links": db.list_rows("legal_links", only_published=True),
     }
 
@@ -258,8 +263,6 @@ def index():
         "index.html",
         slides=db.list_rows("slides", only_published=True),
         areas=db.list_rows("areas", only_published=True),
-        voices=db.list_rows("voices", only_published=True),
-        counters=db.list_rows("counters", only_published=True),
         projects=db.list_rows("projects", only_published=True),
         news=db.list_rows("news", only_published=True),
         events=db.list_rows("events", only_published=True),
@@ -307,7 +310,6 @@ def quienes_somos():
     return render_template(
         "quienes_somos.html",
         areas=db.list_rows("areas", only_published=True),
-        counters=db.list_rows("counters", only_published=True),
     )
 
 
@@ -365,10 +367,6 @@ def evento_detalle(item_id):
                     volver=("eventos", "Todos los eventos"))
 
 
-@app.route("/territorio/<int:item_id>")
-def voz_detalle(item_id):
-    return _detalle("voices", item_id, kicker=None,
-                    volver=("territorio", "Todas las voces"))
 
 
 @app.route("/programas/<int:item_id>")
@@ -383,12 +381,6 @@ def area_detalle(item_id):
                     volver=("quienes_somos", "Todas las áreas"))
 
 
-@app.route("/territorio")
-def territorio():
-    return render_template(
-        "territorio.html",
-        voices=db.list_rows("voices", only_published=True),
-    )
 
 
 @app.route("/documentacion")

@@ -444,6 +444,10 @@ p{margin:0;}
 }
 .feed-visual{display:block;}
 .feed-visual .mondo-visual{display:block;height:100%;min-height:150px;aspect-ratio:auto;}
+/* Con imagen propia (un afiche, por ejemplo) se ve entera, sin recortes */
+.feed-item--photo{grid-template-columns:250px 1fr;align-items:start;}
+.feed-photo{display:block;width:100%;height:auto;}
+.feed-summary p{margin:0 0 6px;}
 .feed-body{padding:20px 24px 22px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;}
 .feed-date{
   font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
@@ -735,37 +739,39 @@ p{margin:0;}
 .doc:hover .dl{text-decoration:underline;}
 
 /* ============================================================
-   PRE-FOOTER / FOOTER
+   PIE DE PÁGINA (al estilo del de la CED)
    ============================================================ */
-.pre-footer{background:var(--panel);color:var(--panel-text);padding:64px 0 52px;}
-.pf-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;}
-.pf-brand{display:flex;flex-direction:column;gap:16px;}
-.pf-brand svg{width:40px;height:46px;color:var(--panel-text);}
-.pf-brand .name{font-family:"Abhaya Libre",Georgia,serif;font-size:20px;font-weight:600;}
-.pf-brand address{font-style:normal;font-size:13px;color:var(--panel-soft);line-height:1.8;}
-.pf-col h4{
-  font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--panel-text);margin-bottom:16px;
+.site-footer{background:var(--panel);color:var(--panel-text);}
+.footer-grid{
+  display:grid;grid-template-columns:1.5fr 1fr 1.15fr;gap:56px;
+  padding-top:64px;padding-bottom:48px;
 }
-.pf-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;}
-.pf-col a{font-size:13px;color:var(--panel-soft);}
-.pf-col a:hover{color:var(--panel-strong);text-decoration:underline;}
-.social{display:flex;gap:12px;margin-top:6px;}
-.social a{
-  width:34px;height:34px;border:1px solid var(--panel-line);border-radius:50%;
-  display:grid;place-items:center;color:var(--panel-soft);
+.footer-col h2{
+  font-family:Montserrat,"Helvetica Neue",Arial,sans-serif;
+  font-size:21px;font-weight:500;letter-spacing:-.005em;
+  color:var(--panel-strong);margin-bottom:22px;
 }
-.social a:hover{background:var(--panel-text);color:var(--panel);}
-.social svg{width:15px;height:15px;}
-
-.site-footer{
-  background:var(--panel);color:var(--panel-soft);
-  border-top:1px solid var(--panel-line);
-  padding:22px 0;font-size:12px;
+.footer-text p{
+  font-family:"Abhaya Libre",Georgia,serif;font-size:17px;line-height:1.65;
+  color:var(--panel-text);margin:0 0 12px;max-width:52ch;
 }
-.footer-inner{display:flex;flex-wrap:wrap;gap:8px 28px;align-items:center;justify-content:space-between;}
-.footer-inner nav{display:flex;flex-wrap:wrap;gap:20px;}
-.site-footer a:hover{color:var(--panel-strong);}
+.footer-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px;}
+.footer-list li,
+.footer-list a{
+  display:flex;align-items:flex-start;gap:14px;
+  font-family:"Abhaya Libre",Georgia,serif;font-size:17px;line-height:1.45;
+  color:var(--panel-text);
+}
+.footer-list a:hover span{text-decoration:underline;text-underline-offset:3px;}
+.footer-list .ico{width:21px;height:21px;flex:none;margin-top:1px;color:var(--panel-strong);}
+.footer-bottom{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 28px;
+  padding-top:22px;padding-bottom:26px;border-top:1px solid var(--panel-line);
+  font-family:"Abhaya Libre",Georgia,serif;font-size:15px;color:var(--panel-soft);
+}
+.footer-bottom p{margin-left:auto;}
+.footer-bottom nav{display:flex;flex-wrap:wrap;gap:18px;font-family:Montserrat,sans-serif;font-size:12px;}
+.footer-bottom a:hover{color:var(--panel-strong);}
 
 /* Aviso de cookies */
 .cookie{
@@ -792,7 +798,8 @@ p{margin:0;}
   .campaign-poster{max-width:360px;margin:0 auto;}
   .mondo-grid{grid-template-columns:repeat(2,1fr);}
   .news-grid,.docs{grid-template-columns:1fr;gap:44px;}
-  .pf-grid{grid-template-columns:1fr 1fr;gap:32px;}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:40px;}
+  .footer-about{grid-column:1 / -1;}
   .slide{grid-template-columns:1fr;gap:28px;padding:56px 24px 84px;}
   .slide-quote{border-left:2px solid var(--hero-ui);padding-left:18px;}
 }
@@ -820,14 +827,16 @@ p{margin:0;}
   .mondo-grid{grid-template-columns:1fr;}
   .founders{grid-template-columns:1fr;}
   .plaque{padding:16px 20px;}
-  .feed-item{grid-template-columns:1fr;}
+  .feed-item,.feed-item--photo{grid-template-columns:1fr;}
+  .feed-item--photo .feed-visual{max-width:260px;margin:18px auto 0;}
   .detail-photo{float:none;width:160px;margin:0 0 18px;}
   .feed-visual .mondo-visual{aspect-ratio:8/3;min-height:0;}
   .sub-menu{position:static;transform:none;opacity:1;visibility:visible;
     border:0;border-left:2px solid var(--accent);box-shadow:none;padding:0 0 6px 14px;}
   .counter{border-left:0;border-top:1px solid var(--line);padding-top:24px;}
   .counter:first-child{border-top:0;padding-top:0;}
-  .pf-grid{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr;}
+  .footer-bottom p{margin-left:0;}
   .band{padding:56px 0;}
 }
 
