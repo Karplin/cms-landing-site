@@ -4,43 +4,68 @@
    ============================================================ */
 
 :root{
-  --bg:#F7F5F0;
+  /* Colores del logo de las OMP, como en el sitio público */
+  --omp-oro:#FAC73F;
+  --omp-azul:#10417C;
+  --omp-rojo:#BF1A23;
+  --omp-verde:#3D8A47;
+
+  --bg:#F3F6FB;
   --surface:#FFFFFF;
-  --text:#1B2A2F;
-  --text-soft:#54666C;
-  --text-faint:#8A9AA0;
-  --accent:#B07C22;
-  --accent-ink:#8A5F14;
-  --panel:#2E545F;
-  --panel-deep:#22404A;
-  --panel-text:#E7EEEF;
-  --panel-soft:#A7BEC3;
-  --line:rgba(27,42,47,.14);
-  --line-strong:rgba(27,42,47,.26);
-  --ok-bg:#E8F1E9; --ok-text:#255D34;
-  --err-bg:#F8E7E7; --err-text:#8B2020;
+  --text:#13223F;
+  --text-soft:#4A5672;
+  --text-faint:#8590A6;
+  --accent:var(--omp-oro);      /* botones y marcas de selección */
+  --accent-ink:var(--omp-azul); /* enlaces y textos de acento: en el panel
+                                   el rojo queda solo para lo peligroso */
+  --btn-text:#0E2244;
+  --danger:var(--omp-rojo);
+  --panel:#0D2B57;
+  --panel-deep:#0A2246;
+  --panel-text:#E8EDF7;
+  --panel-soft:#A9B8D6;
+  --line:rgba(19,34,63,.13);
+  --line-strong:rgba(19,34,63,.26);
+  --focus:rgba(250,199,63,.35);
+  --ok-bg:#E6F2E8; --ok-text:#2B6A35;
+  --err-bg:#FBE8E9; --err-text:#9A141C;
   --side-w:246px;
 }
 
 @media (prefers-color-scheme: dark){
   :root{
-    --bg:#0F1618;
-    --surface:#182123;
-    --text:#EBE5D9;
-    --text-soft:#AEBDC0;
-    --text-faint:#7E8F93;
-    --accent:#D9A548;
-    --accent-ink:#E7BC6C;
-    --panel:#12292F;
-    --panel-deep:#0C1D22;
-    --panel-text:#E2ECEE;
-    --panel-soft:#9FB8BD;
-    --line:rgba(235,229,217,.16);
-    --line-strong:rgba(235,229,217,.3);
-    --ok-bg:#17301F; --ok-text:#9AD3A9;
-    --err-bg:#37191A; --err-text:#F0A6A6;
+    --bg:#0A1424;
+    --surface:#13233F;
+    --text:#E9EDF5;
+    --text-soft:#A9B4CA;
+    --text-faint:#7A869E;
+    --accent-ink:#8FB2EA;
+    --danger:#FF8F95;
+    --panel:#071830;
+    --panel-deep:#051226;
+    --panel-text:#E2E8F4;
+    --panel-soft:#9DADCB;
+    --line:rgba(233,237,245,.14);
+    --line-strong:rgba(233,237,245,.28);
+    --ok-bg:#132C1B; --ok-text:#9AD3A9;
+    --err-bg:#3A1418; --err-text:#FFA3A8;
   }
 }
+
+/* Franja con los colores del logo, como en el sitio */
+.side::before,
+.login-box::before{
+  content:"";display:block;height:4px;flex:none;
+  background:linear-gradient(90deg,
+    var(--omp-oro) 0 25%, var(--omp-azul) 25% 50%,
+    var(--omp-rojo) 50% 75%, var(--omp-verde) 75% 100%);
+}
+.side::before{margin-top:-24px;}                 /* pegada al borde, sin el relleno */
+.login-box::before{margin:-38px -34px 4px;border-radius:3px 3px 0 0;}
+
+/* Logo de las OMP: lleva blanco en la «P», así que va sobre placa blanca */
+.side-brand img{height:34px;width:auto;flex:none;background:#FFFFFF;padding:3px 5px;border-radius:3px;}
+.login-logo{height:60px;width:auto;align-self:flex-start;}
 
 *{box-sizing:border-box;}
 body{
@@ -61,7 +86,6 @@ h1,h2,h3,h4,legend{margin:0;}
   padding:24px 0 20px;position:sticky;top:0;height:100vh;overflow-y:auto;
 }
 .side-brand{display:flex;align-items:center;gap:12px;padding:0 22px;}
-.side-brand svg{width:30px;height:34px;flex:none;}
 .side-brand span{
   font-family:"Abhaya Libre",Georgia,serif;font-size:17px;font-weight:600;line-height:1.1;
 }
@@ -121,10 +145,10 @@ h1,h2,h3,h4,legend{margin:0;}
 .btn{
   display:inline-flex;align-items:center;gap:8px;
   padding:10px 22px;border:0;border-radius:2px;cursor:pointer;
-  background:var(--accent);color:#1B1206;
+  background:var(--accent);color:var(--btn-text);
   font-family:inherit;font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
 }
-.btn:hover{background:var(--accent-ink);color:#FFF6E4;}
+.btn:hover{background:var(--omp-azul);color:#FFFFFF;}
 .btn--ghost{background:transparent;color:var(--text);border:1px solid var(--line-strong);}
 .btn--ghost:hover{background:var(--text);color:var(--bg);}
 
@@ -133,7 +157,7 @@ h1,h2,h3,h4,legend{margin:0;}
   font-size:12.5px;color:var(--accent-ink);
 }
 .link:hover{text-decoration:underline;}
-.link--danger{color:#A33;}
+.link--danger{color:var(--danger);}
 
 /* ---------------- Tabla ---------------- */
 .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface);}
@@ -170,7 +194,7 @@ h1,h2,h3,h4,legend{margin:0;}
 
 .tag{
   margin-left:8px;padding:2px 8px;border-radius:999px;
-  background:var(--accent);color:#1B1206;
+  background:var(--accent);color:var(--btn-text);
   font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
 }
 
@@ -195,7 +219,7 @@ h1,h2,h3,h4,legend{margin:0;}
 
 .field{display:flex;flex-direction:column;gap:6px;}
 .field label{font-size:12px;font-weight:600;color:var(--text-soft);}
-.field .req{color:#A33;}
+.field .req{color:var(--danger);}
 .field input[type="text"],
 .field input[type="password"],
 .field input[type="number"],
@@ -207,7 +231,7 @@ h1,h2,h3,h4,legend{margin:0;}
 }
 .field textarea{resize:vertical;line-height:1.55;}
 .field input:focus,.field textarea:focus,.field select:focus{
-  outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(176,124,34,.16);
+  outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--focus);
 }
 .hint{margin:0;font-size:11.5px;color:var(--text-faint);}
 
@@ -253,7 +277,6 @@ h1,h2,h3,h4,legend{margin:0;}
   border-radius:3px;padding:38px 34px 30px;
   display:flex;flex-direction:column;gap:18px;
 }
-.login-mark{width:36px;height:41px;color:var(--accent-ink);}
 .login-box h1{
   font-family:"Abhaya Libre",Georgia,serif;font-size:26px;font-weight:600;line-height:1.1;
 }
@@ -285,7 +308,7 @@ h1,h2,h3,h4,legend{margin:0;}
 .guide-banner-icon{
   flex:none;width:30px;height:30px;border-radius:50%;
   display:grid;place-items:center;
-  background:var(--accent);color:#1B1206;font-weight:700;font-size:15px;
+  background:var(--accent);color:var(--btn-text);font-weight:700;font-size:15px;
 }
 .guide-banner strong{display:block;font-size:13.5px;}
 .guide-banner span span,
@@ -355,5 +378,5 @@ h1,h2,h3,h4,legend{margin:0;}
 .gallery-thumb{display:flex;flex-direction:column;gap:5px;cursor:pointer;}
 .gallery-thumb img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:2px;display:block;}
 .gallery-thumb span{font-size:11.5px;color:var(--text-soft);display:flex;align-items:center;gap:5px;}
-.gallery-thumb:has(input:checked) img{opacity:.35;outline:2px solid #A33;}
+.gallery-thumb:has(input:checked) img{opacity:.35;outline:2px solid var(--danger);}
 .field--gallery input[type="file"]{font-size:12.5px;color:var(--text-soft);}
