@@ -80,6 +80,11 @@
   var cookie = document.getElementById("cookie");
   var ok = document.getElementById("cookie-ok");
   if (cookie && ok) {
-    ok.addEventListener("click", function () { cookie.hidden = true; });
+    ok.addEventListener("click", function () {
+      /* Se recuerda un año en todas las páginas; es una cookie técnica. */
+      var seguro = location.protocol === "https:" ? "; Secure" : "";
+      document.cookie = "cookies_ok=1; Max-Age=31536000; Path=/; SameSite=Lax" + seguro;
+      cookie.hidden = true;
+    });
   }
 })();

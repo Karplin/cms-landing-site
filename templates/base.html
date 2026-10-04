@@ -156,7 +156,8 @@
   </div>
 </footer>
 
-{% if settings.cookie_text %}
+{# Si ya se aceptó, el servidor ni siquiera dibuja el aviso #}
+{% if settings.cookie_text and not request.cookies.get("cookies_ok") %}
 <aside class="cookie" id="cookie" aria-label="Aviso de cookies">
   <h5>{{ settings.cookie_title }}</h5>
   <p>{{ settings.cookie_text }}</p>
